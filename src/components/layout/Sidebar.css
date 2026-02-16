@@ -1,0 +1,76 @@
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s ease;
+    z-index: 15;
+}
+
+.sidebar-content {
+    overflow-y: auto;
+    padding: var(--spacing-md);
+    flex: 1;
+}
+
+.chapter {
+    margin-bottom: var(--spacing-lg);
+}
+
+.chapter-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    padding: 0 var(--spacing-xs);
+    letter-spacing: 0.5px;
+}
+
+.chapter-lessons {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lesson-link {
+    display: block;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.lesson-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .lesson-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.lesson-link.active {
+    background-color: var(--bg-card);
+    color: var(--color-primary);
+    font-weight: 500;
+    box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 64px;
+        /* Height of header */
+        left: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+}

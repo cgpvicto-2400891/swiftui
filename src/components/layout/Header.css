@@ -1,0 +1,210 @@
+.header {
+    height: 64px;
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-lg);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.menu-btn {
+    display: none;
+    padding: var(--spacing-xs);
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+}
+
+.menu-btn:hover {
+    background-color: var(--bg-body);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+}
+
+.swift-logo {
+    color: var(--color-primary);
+}
+
+.ui-logo {
+    color: var(--text-main);
+}
+
+.tutorial-badge {
+    font-size: 10px;
+    background-color: var(--bg-body);
+    color: var(--text-muted);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+    border: 1px solid var(--border-color);
+    font-weight: 600;
+}
+
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 var(--spacing-lg);
+}
+
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-input);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.search-bar-container.focused {
+    background-color: var(--bg-card);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(240, 81, 56, 0.1);
+    border-bottom-left-radius: 0;
+    /* Align with dropdown if needed, though dropdown is usually separate */
+}
+
+/* Adjust radius when dropdown is visible? */
+/* Actually, dropdown is usually floating. */
+
+.search-icon {
+    color: var(--text-muted);
+    margin-right: 8px;
+}
+
+.search-input {
+    border: none;
+    background: none;
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-main);
+    outline: none;
+    width: 100%;
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-shortcut {
+    font-size: 10px;
+    background-color: var(--bg-card);
+    color: var(--text-muted);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    font-family: var(--font-mono);
+    pointer-events: none;
+}
+
+.clear-btn {
+    padding: 2px;
+    color: var(--text-muted);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--text-main);
+}
+
+/* Search Dropdown */
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-top: 8px;
+    box-shadow: var(--shadow-lg);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 100;
+    padding: 4px;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+.search-result-item:hover {
+    background-color: var(--bg-input);
+}
+
+.result-icon {
+    color: var(--text-muted);
+    margin-right: 8px;
+    display: flex;
+}
+
+.result-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.result-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.result-chapter {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.no-results {
+    padding: 12px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: flex;
+    }
+
+    .header {
+        padding: 0 var(--spacing-md);
+    }
+
+    .search-bar-container {
+        max-width: 200px;
+        /* Smaller on mobile but visible */
+    }
+
+    .search-shortcut {
+        display: none;
+    }
+}

@@ -1,0 +1,5529 @@
+Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+8.1
+Les tableaux Swift
+110.1
+Format JSON dans un modèle
+113.1
+Simulation d'examen final
+79.8
+Format JSON dans un modèle
+111.1
+Chat et chien
+108.1
+Combat des pouces MQTT
+105.4
+Publication et abonnement MQTT avec Home Assistant
+106.1
+MQTT entre deux boîtes Home Assistant
+114.3
+Grille de correction
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+Swift
+7.1 Variables, constantes et types de données
+Dans cette fiche :
+
+Déclaration
+Types de base
+Type Decimal
+Type CGFloat
+Instances de structures et de classes
+Types opaques
+À quel endroit déclarer les variables dans SwiftUI?
+Déclaration
+Avec Swift, les mots-clés var et let permettent de déclarer respectivement des variables et des constantes.
+
+var : déclare une variable
+let : déclare une constante
+Swift
+var nom = "Annie"
+let iterations = 10
+
+Lorsque le type peut être déduit à partir de la valeur d'initialisation, Swift effectue automatiquement une inférence de type. Il n’est donc pas nécessaire de préciser le type, comme dans l'exemple précédent.
+
+Si désiré, il est tout de même possible de spécifier le type.
+
+Swift
+var nom: String = "Annie"
+let iterations: Int = 10
+
+Dans le cas où le type de la variable ne peut pas être déterminé automatiquement, il est obligatoire de le préciser.
+
+Swift
+var nom: String
+var montant: Decimal = 10.99   // sans le type, la variable aurait été de type Double
+
+Types de base
+Les types de base en Swift sont :
+
+Int : nombre entier.
+Il est également possible de spécifier sur combien de bits on désire stocker le nombre, par exemple 32 bits ou 64 bits, avec Int32 et Int64. Ceci affectera les valeurs minimales et maximales qui peuvent être stockées.
+Int32 : -2147483648 à 2147483647
+Int64 : -9223372036854775808 à 9223372036854775807
+Cette précision n'est généralement pas nécessaire. Si vous travaillez sur un système en 64 bits, Int fera la même chose que Int64.
+UInt : Nombre entier non signé (Unsigned)
+Double : Nombre à virgule flottante codé sur 64 bits (15 décimales) - idéal pour calcul scientifique
+Float : Nombre à virgule flottante codé sur 32 bits (6 décimales) - idéal pour jeux, graphiques, animation
+Bool : Booléen
+String : chaîne de caractères.
+Fait intéressant : on peut convertir une chaîne de caractères en tableau comme suit :
+
+Swift
+let tableauLettres = Array(nom) // ["A", "n", "n", "i", "e"]
+
+Type Decimal
+Si vous développez une application qui doit travailler avec des valeurs monétaires, le type par excellence est Decimal.
+
+Decimal évite les erreurs d’arrondi associées aux nombres à virgule flottante.
+
+Swift
+let prix: Decimal = 69.44
+
+Si on initialise une variable de type Decimal à partir d'une chaîne, il faut tenir compte que le résultat pourrait être nil si la chaîne n'était pas conforme.
+
+Dans cet exemple, il est sécuritaire d'utiliser l'opérateur de déballage forcé (!) puisque la chaîne est codée en dur et qu'on est certains que la valeur pourra être convertie en Decimal.
+
+Swift
+let prix = Decimal(string: "69.44")!
+
+Dans d'autres contextes, il est préférable d'utiliser if let.
+
+Swift
+if let prix = Decimal(string: prixSaisi) {
+  // ici, on a l'assurance que le prix est valide.
+} else {
+  message = "Veuillez spécifier un prix valide (ex : 12.50)"
+}
+
+Notez que pour convertir une chaîne en Decimal, ceci ne fonctionne pas car la structure Decimal n'a pas de constructeur avec un paramètre non nommé de type String.
+
+Swift
+let montantTexte = "12.25"
+if let montantDecimal = Decimal(montantTexte) {
+  ...
+
+}
+
+Pour que ça fonctionne, il faut préciser que le nom du premier paramètre est string.
+
+Swift
+let montantTexte = "12.25"
+if let montantDecimal = Decimal(string: montantTexte) {
+  ...
+}
+
+Type CGFloat
+Le type CGFloat est très utilisé dans le développement d’interfaces graphiques. Il représente un nombre à virgule flottante optimisé pour les calculs graphiques.
+
+SwiftUI utilise CGFloat pour :
+
+les positions (x, y)
+les tailles (width, height)
+les angles
+les coordonnées dans l’espace graphique
+SwiftUI
+let largeur: CGFloat = 120
+let opacite: CGFloat = 0.5
+
+Techniquement, CGFloat est très proche de Double. Son avantage est qu'il s'adapte automatiquement à l'architecture de l'appareil (32 ou 64 bits).
+
+Dans cet exemple, les paramètres pour .frame() et pour .opacity() sont automatiquement convertis en CGFloat.
+
+SwiftUI
+Circle()
+  .frame(width: 100, height: 100)
+  .opacity(0.5)
+
+Par contre, si les valeurs étaient lues dans des variables, il faudrait s'assurer que le type de la variable est correctement spécifié ou qu'il a été correctement inféré.
+
+SwiftUI
+let largeur = 100 // ici, le type inféré est Int
+...
+Circle()
+  .frame(width: largeur)   // erreur : Cannot convert value of type 'Int' to expected argument type 'CGFloat'
+
+Pour régler ce problème, plusieurs approches sont possibles :
+
+SwiftUI
+let largeur: CGFloat = 100
+...
+Circle()
+  .frame(width: largeur)
+
+ou
+
+SwiftUI
+let largeur = 100
+...
+Circle()
+  .frame(width: CGFloat(largeur))
+
+ou encore
+
+SwiftUI
+let largeur = 100.0   // ici, le type inféré est Double
+...
+Circle()
+  .frame(width: largeur)   // SwiftUI est souvent capable de faire une conversion automatique entre Double et CGFloat
+
+ 
+
+Instances de structures et de classes
+Les mots-clés var et let permettent également de déclarer des instances de structures et de classes.
+
+Petite mise en garde : si une instance d'une structure est déclarée avec let, l’instance devient entièrement immuable.
+
+L'instance ainsi que toutes ses propriétés ne pourront pas être réassignées.
+
+Swift
+let monInstance = MaStructure()
+monInstance.unePropriete = "abc"   
+
+Ce code générera l'erreur « Cannot assign to property: 'monInstance' is a 'let' constant ».
+
+Cannot assign to property: 'monInstance' is a 'let' constant
+
+Notez que ce comportement est différent de ce qu'on retrouve dans d'autres langages, par exemple JavaScript.
+
+Les classes réagissent différemment.
+
+Swift
+let monInstance = MaClasse()
+monInstance.unePropriete = "abc" 
+
+Lorsqu'on a une instance d'une classe, il est possible de modifier ses propriétés même si l'instance a été déclarée avec let, à condition que la propriété ait elle-même été déclarée avec var dans la classe.
+
+Types opaques
+Quand on déclare une variable, il est possible de lui donner un type opaque, c'est-à-dire de ne pas spécifier le type précis d'une variable.
+
+Ceci sera fait à l'aide du mot-clé some suivi d'un protocole.
+
+SwiftUI
+var body: some View {
+  ...
+}
+
+Ici, on voit que la variable body est d'un type qui répond au protocole View mais on ne connaît pas son type précis. Ce pourrait être un Text, un VStack, etc.
+
+Sans entrer dans les détails techniques, disons que les types opaques permettent de régler une problématique en n'exposant pas le type précis d'une variable.
+
+À quel endroit déclarer les variables dans SwiftUI?
+Les variables et constantes qui doivent être utilisées dans toute une vue seront déclarées directement dans la structure de la vue, avant le body.
+
+Dans l'exemple qui suit, le contexte dicte qu'on doit utiliser une constante.
+
+SwiftUI
+struct ContentView: View {
+  let nom: String = "Annie"
+
+  var body: some View {
+    ...
+  }
+}
+
+Il est possible de déclarer les variables et constantes avec une portée plus petite, par exemple direction dans l'action d'un bouton.
+
+La variable ou constante n'existera pas en dehors du code de ce bouton.
+
+SwiftUI
+Button(action: {
+  var nom: String = "Annie"
+  ...
+}) {
+  Text("Vérifier")
+}
+
+Pour plus d'information
+« The Basics - Constants and Variables ». Swift. https://docs.swift.org/swift-book/LanguageGuide/TheBasics.html#ID310
+
+« Swift Integer Quick Guide ». Use Your Loaf. https://useyourloaf.com/blog/swift-integer-quick-guide/
+
+« Swift – Integer, Floating-Point Numbers ». Geeks for Geeks. https://www.geeksforgeeks.org/swift-integer-floating-point-numbers/
+
+« Constants, Variables and Types ». Dimitri Racordon. https://kyouko-taiga.github.io/swift-thoughts/tutorial/chapter-1/
+
+▼Publicité
+
+Par Christiane Lagacé
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.1
+Variables, constantes et types de données
+8.1
+Les tableaux Swift
+110.1
+Format JSON dans un modèle
+113.1
+Simulation d'examen final
+79.8
+Format JSON dans un modèle
+111.1
+Chat et chien
+108.1
+Combat des pouces MQTT
+105.4
+Publication et abonnement MQTT avec Home Assistant
+106.1
+MQTT entre deux boîtes Home Assistant
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.2 Les dictionnaires
+Un dictionnaire, parfois appelé tableau associatif, est un type de tableau dont les données sont regroupées en paires clé-valeur.
+
+Toutes les clés doivent être du même type et toutes les valeurs doivent être du même type, qui peut être différent du type des clés.
+
+Déclaration et initialisation
+Pour déclarer un dictionnaire vide :
+
+Swift
+var monDictionnaire = [String:Int]()
+
+ou
+
+Swift
+var monDictionnaire:[String:Int] = [:]
+
+On peut également le remplir dès sa déclaration :
+
+Swift
+var monDictionnaire:[String:Int] = ["ABC":10, "DEF":3, "GHI":8]
+
+Pour ajouter une valeur, il suffit d'utiliser une clé qui n'existe pas encore.
+
+Swift
+monDictionnaire["JKL"] = 25
+
+Accéder à un élément
+Plutôt que de retrouver une information à l'aide d'un indice numérique, on retrouvera la valeur d'un tableau associatif à partir de sa clé.
+
+Swift
+let valeur = monDictionnaire["DEF"]   // 3
+
+Boucler dans le dictionnaire
+Pour boucler dans les éléments du dictionnaire, la boucle for est toute indiquée.
+
+Swift
+for (cle, valeur) in monDictionnaire {
+  print("Clé: \(cle) Valeur: \(valeur)")
+}
+
+On peut également utiliser la propriété keys(). Ceci retourne une collection. On convertira le résultat en tableau à l'aide de Array().
+
+Swift
+let cles = Array(monDictionnaire.keys)
+var valeur: Int
+
+for cle in cles {
+  valeur = monDictionnaire[cle]!
+  print(cle)
+  print(valeur)
+}
+
+Remarquez le point d'exclamation dans l'instruction qui retrouve la valeur. Dans ce contexte, on l'appelle implicitly unwrapped optional.
+
+Si on ne le met pas, on obtiendra cet avertissement : « Expression implicitly coerced from 'Int?' to 'Any' ».
+
+C'est que le compilateur nous informe que monDictionnaire[cle] pourrait être nul. Il demande ce qu'il doit faire si ça arrive afin de ne pas faire planter le programme.
+
+Avec le point d'exclamation – qu'il faut utiliser seulement dans des situations très spécifiques – on informe le compilateur que c'est certain que la valeur ne peut pas être nulle.
+
+Tri
+Dans les deux boucles précédentes, les valeurs affichées à l'écran pourraient être affichées dans un ordre différent à chaque fois que le programme est exécuté.
+
+Si on a besoin d'un ordre spécifque, il faut le spécifier.
+
+Swift
+let cles = Array(monDictionnaire.keys).sorted() 
+
+ou encore :
+
+Swift
+let monDictionnaireTrie = monDictionnaire.sorted(by: <)
+
+Quelques méthodes utiles
+allSatisfy()
+contains()
+count()
+filter()
+firstIndex()
+forEach()
+index()
+isEmpty()
+keys()
+max()
+min()
+randomElement()
+remove()
+removeValue()
+values()
+Pour plus d'information
+« Dictionary ». Apple. https://developer.apple.com/documentation/swift/dictionary
+
+« Collection Types - Dictionnaries ». Swift. https://docs.swift.org/swift-book/LanguageGuide/CollectionTypes.html#ID113
+
+« Expression implicitly coerced from ‘String?’ to ‘Any’- WHY SWIFT, WHY :( ». Steven Curtis. https://stevenpcurtis.medium.com/expression-implicitly-coerced-from-string-to-any-why-swift-why-190dd0a58c58
+
+« Dictionaries in SwiftDictionaries in Swift ». Andy Bargh. https://andybargh.com/dictionaries-in-swift/
+
+▼Publicité
+
+Par Christiane Lagacé
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Vide la liste des dernières formations consultées sans affecter vos droits.
+
+Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.2
+Les dictionnaires
+7.1
+Variables, constantes et types de données
+8.1
+Les tableaux Swift
+110.1
+Format JSON dans un modèle
+113.1
+Simulation d'examen final
+79.8
+Format JSON dans un modèle
+111.1
+Chat et chien
+108.1
+Combat des pouces MQTT
+105.4
+Publication et abonnement MQTT avec Home Assistant
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.3 Les structures
+Les structures Swift permettent de représenter des données complexes ainsi que des comportements.
+
+Dans SwiftUI, une structure sera généralement placée dans son propre fichier. Le nom de la structure sera identique au nom du fichier.
+
+Puisque les structures représentent les données de l'application (le modèle), leurs fichiers seront placés dans un dossier nommé Models.
+
+Le nom de la structure sera un mot au singulier.
+Définir une structure
+Dans la structure, les propriétés sont définies avec le mot-clé var et les méthodes, avec le mot-clé func.
+
+Fichier Models/Ami.swift
+import Foundation
+
+struct Ami {
+  var nomFamille: String
+  var prenom: String
+
+  func inviter() {
+    ...
+  }
+}
+
+Instancier une structure
+Pour créer une instance de la structure, on procédera comme suit :
+
+Swift
+let ami = Ami(nomFamille: "Gagnon", prenom: "Annie")
+
+Dans cet exemple, il ne sera pas possible de modifier les propriétés de l'instance puisqu'elle a été créée avec le mot-clé let.
+
+Constructeur
+Chaque structure contient un constructeur par défaut, qu'on appelle en anglais memberwise initializer. Il n'y a rien à coder pour que ce constructeur existe. Il est là de base.
+
+Le memberwise initializer permet d'instancier la structure en précisant une valeur pour chacune des propriétés, comme dans l'exemple précédent.
+
+Il est possible de définir un constructeur nommé init() qui répondra à nos besoins de façon plus précise, par exemple en donnant une valeur par défaut à certaines propriétés ou en effectuant un traitement particulier.
+
+Attention : sans précaution, ceci écrasera le memberwise initializer. C'est pourquoi il est préférable de créer une extension de la structure dans laquelle le ou les constructeurs seront définis.
+
+De cette façon, l'instance pourra être créée à l'aide du memberwise initializer ou d'un des constructeurs définis dans l'extension.
+
+Dans un projet SwiftUI, les extensions peuvent être placées à différents endroits selon la structure de fichiers dont vous vous êtes dotés. Dans le cas d'une extension à une structure que vous avez créée, il est intéressant de la placer dans le même fichier que la structure.
+
+Fichier Models/Ami.swift
+extension Ami {
+  init(prenom: String) {
+    self.prenom = prenom
+    self.nomFamille = ""
+  }
+}
+
+Désormais, pour instancier un Ami, il est possible de fournir seulement le prénom.
+
+Le nom de famille pourra être ajusté au besoin par une instruction séparée.
+
+Swift
+var ami = Ami(prenom: "Annie")
+...
+ami.nomFamille = "Gagnon"
+
+Tout constructeur doit s'assurer que chacune des propriétés a une valeur valide lorsque l'instanciation est terminée.
+▼Publicité
+
+Par Christiane Lagacé
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.4
+Les classes
+7.3
+Les structures
+7.2
+Les dictionnaires
+7.1
+Variables, constantes et types de données
+8.1
+Les tableaux Swift
+110.1
+Format JSON dans un modèle
+113.1
+Simulation d'examen final
+79.8
+Format JSON dans un modèle
+111.1
+Chat et chien
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.4 Les classes
+Tout comme les structures, les classes Swift permettent de représenter des données complexes ainsi que des comportements.
+
+Dans SwiftUI, une classe sera généralement placée dans son propre fichier. Le nom de la classe sera identique au nom du fichier.
+
+Puisque les classes représentent les données de l'application (le modèle), leurs fichiers seront placés dans un dossier nommé Models.
+
+Le nom de la classe sera un mot au singulier.
+Définir une classe
+Dans la classe, les propriétés sont définies avec le mot-clé var et les méthodes, avec le mot-clé func.
+
+Il est obligatoire de définir au moins un constructeur.
+
+Fichier Models/Ami.swift
+import Foundation
+
+class Ami {
+  var nomFamille: String
+  var prenom: String
+
+  init(nomFamille: String, prenom: String) {
+    self.nomFamille = nomFamille
+    self.prenom = prenom
+  }
+
+  func inviter() {
+    ...
+  }
+}
+
+Instancier une classe
+Pour créer une instance de la classe, qu'on appellera objet, on procédera comme suit :
+
+Swift
+let ami = Ami(nomFamille: "Gagnon", prenom: "Annie")
+
+Dans cet exemple, il ne sera pas possible de modifier les propriétés de l'objet puisqu'il a été créé avec le mot-clé let.
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 4 février 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.5
+Les propriétés calculées
+7.4
+Les classes
+7.3
+Les structures
+7.2
+Les dictionnaires
+7.1
+Variables, constantes et types de données
+8.1
+Les tableaux Swift
+110.1
+Format JSON dans un modèle
+113.1
+Simulation d'examen final
+79.8
+Format JSON dans un modèle
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.5 Les propriétés calculées
+Dans une classe ou dans une structure, il est possible de définir des propriétés calculées, c'est-à-dire des propriétés dont la valeur est calculée à partir d'autres valeurs.
+
+Swift
+class Eleve {
+  var prenom: String
+  var nomFamille: String
+
+
+  // propriété calculée
+  var nomComplet: String {
+    self.prenom + " " + self.nomFamille
+  }
+}
+
+La propriété calculée peut obtenir une valeur différente selon une condition. À ce moment, il faut utiliser le mot-clé return pour définir sa valeur.
+
+Swift
+class Eleve {
+  var prenom: String
+  var nomFamille: String
+  var gentile: String?
+
+
+  // propriété calculée
+  var nomEtGentile: String {
+    if self.gentile != nil {
+      return self.prenom + " " + self.nomFamille + " de " + self.gentile
+    }
+    else {
+      return self.prenom + " " + self.nomFamille
+    }
+  }
+}
+
+Voici un autre exemple de propriétés calculées, cette fois dans une vue.
+
+Swift
+struct AjouterItem: View {
+  @State private var nom: String = ""
+  ...
+
+  // propriété calculée
+  var messageNom: String {
+    var message = ""
+    if nom.count == 0 {
+      message = "Le nom est requis."
+    }
+    else if nom.count > 100 {
+      message = "Le nom doit comporter au maximum 100 caractères."
+    }
+
+    return message
+  }
+
+  // propriété calculée
+  var formulaireValide: Bool {
+    messageNom == "" && messageDescription == ""
+  }
+
+  ...
+
+}
+
+Pour plus d'information
+« Properties ». Swift. https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/
+
+« What is a Computed Property in Swift? ». Swift Lee. https://www.avanderlee.com/swift/computed-property/
+
+« What are computed properties in Swift and when should you use them? ». Donny Wals. https://www.donnywals.com/what-are-computed-properties-in-swift-and-when-should-you-use-them/
+
+« Deciding between a computed property and a function in Swift ». Donny Wals. https://www.donnywals.com/deciding-between-a-computed-property-and-a-function-in-swift/
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 6 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.6
+Les énumérations
+7.5
+Les propriétés calculées
+7.4
+Les classes
+7.3
+Les structures
+7.2
+Les dictionnaires
+7.1
+Variables, constantes et types de données
+8.1
+Les tableaux Swift
+110.1
+Format JSON dans un modèle
+113.1
+Simulation d'examen final
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.6 Les énumérations
+Dans cette fiche :
+
+enum
+Valeur brute des cas de l'énumération (Raw value)
+enum
+Une énumération, ou enum pour les intimes, est un modèle de données qui permet de définir un type qui comporte une liste déterminée de valeurs possibles. Chaque valeur est appelée un cas.
+
+Par exemple, on pourrait avoir un type Couleur qui accepte les cas rouge, bleu et jaune.
+
+Pour définir une énumération dans le langage Swift, on utilise le mot-clé enum.
+
+Swift
+enum Couleur {
+  case rouge
+  case bleu
+  case jaune
+}
+
+ou, plus simplement :
+
+Swift
+enum Couleur {
+  case rouge, bleu, jaune
+}
+
+Les cas possibles de l'énumération seront utilisés un peu comme les propriétés statiques d'une classe.
+
+Swift
+let couleur = Couleur.bleu
+
+Grâce aux valeurs déterminées de l'énumération, les valeurs acceptées pour un paramètre seront connues dès la compilation.
+
+Il devient impossible de passer une valeur invalide.
+
+SwiftUI
+/**
+ Initialise un message selon une couleur.
+
+
+ - parameters:
+   - couleur: Couleur pour laquelle le message doit être initialisé.
+
+
+ - Returns: Message.
+*/
+
+
+func message(couleur: Couleur) -> String {
+  switch couleur {
+    case .rouge:
+      return "La couleur est rouge."
+
+    case .bleu:
+      return "La couleur est bleu."
+
+    case .jaune:
+      return "La couleur est jaune."
+  }
+}
+...
+
+Text(message(Couleur.bleu))   // le compilateur s'assure que la couleur passée en paramètre est un des cas de l'énumération
+
+...
+
+Valeur brute des cas de l'énumération (Raw value)
+Il est possible de fournir, pour chaque cas de l'énumération, une valeur brute qui pourra être retrouvée à l'aide de .rawValue.
+
+Les valeurs brutes doivent être uniques dans l'énumération.
+
+Le type de la valeur brute sera spécifié à côté du nom de l'énumération.
+
+Swift
+enum Couleur: String {
+  case rouge = "Rouge"
+  case bleu = "Bleu"
+  case jaune = "Jaune"
+}
+
+Pour référer à la valeur brute :
+
+SwiftUI
+Text(Couleur.bleu.rawValue)   // affiche Bleu
+
+Valeurs brutes inférées
+Si vous ne fournissez pas de valeurs brutes aux cas de l'énumération, une valeur sera automatiquement fournie par Swift selon le type déclaré à côté de l'énumération.
+
+Avec un String, le .rawValue fournira exactement le mot-clé qui identifie le cas.
+
+SwiftUI
+enum Couleur: String {
+  case rouge
+  case bleu
+  case jaune
+}
+...
+var couleur = Couleur.rouge
+...
+Text(couleur.rawValue)   // affiche rouge
+
+Et avec un type Int, on aura l'index du cas, numéroté à partir de 0.
+
+SwiftUI
+enum Couleur: Int {
+  case rouge
+  case bleu
+  case jaune
+}
+...
+var couleur = Couleur.rouge
+...
+Text("\(couleur.rawValue)")   // affiche 0
+
+Pour plus d'information
+« Enumerations ». Swift. https://docs.swift.org/swift-book/LanguageGuide/Enumerations.html
+
+« POO : les énumérations ». Swiftement. https://www.swiftement.fr/2022/01/poo-les-enumerations/
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 8 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+7.6
+Les énumérations
+7.5
+Les propriétés calculées
+7.4
+Les classes
+7.3
+Les structures
+7.2
+Les dictionnaires
+7.1
+Variables, constantes et types de données
+8.1
+Les tableaux Swift
+110.1
+Format JSON dans un modèle
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.7 L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+Il est possible de demander à Swift d'interpréter une variable ou une constante à l'intérieur d'une chaîne de caractères. Cette technique s'appelle l'interpolation de chaînes ou, en anglais, string interpolation.
+
+Voyons d'abord la différence entre la conversion de type et l'interpolation de chaîne.
+
+Conversion de type
+Si vous avez besoin d'une simple conversion de type, par exemple de changer un nombre en chaîne de caractères, vous pouvez utiliser le constructeur de la structure String.
+
+Swift
+let valeur:Int = 3
+
+Text(String(valeur))
+
+Interpolation de chaîne
+Dans sa plus simple expression, l'interpolation de chaîne permet elle aussi d'effectuer une conversion de type.
+
+Swift
+let valeur:Int = 3
+
+Text("\(valeur)")
+
+L'interpolation de chaîne est cependant beaucoup plus puissante.
+
+Elle permet notamment de créer une chaîne qui contient des variables.
+
+On placera la variable ou la constante à l'intérieur de la chaîne, entre parenthèses, le tout précédé par une barre oblique inverse.
+
+SwiftUI
+let nom: String = "Annie"
+Text("Bonjour \(nom)")
+
+Format des nombres
+Dans le cas d'un nombre avec décimales, l'interpollation crée également une chaîne tout en permettant de préciser le format attendu.
+
+Par exemple, pour arrondir le nombre à deux décimales à l'aide de l'interpolation de chaîne :
+
+SwiftUI
+let montant: Double = 10
+
+Text("Montant: \(montant, specifier: "%.2f") $")
+
+On obtiendra le même résultat comme suit :
+
+SwiftUI
+let rouge: Double = 10
+Text(String(format: "Rouge: %.2f $", rouge))
+
+Formats avancés
+Pour obtenir plus de contrôle sur le format des nombres, il est possible de travailler avec la classe NumberFormatter.
+
+Le format attendu sera précisé dans la méthode init() du ContentView. 
+
+Ici, on aura un signe monétaire avec deux décimales.
+
+SwiftUI
+struct ContentView: View {
+  ...
+  let format: NumberFormatter
+
+
+  init() {
+
+    let format = NumberFormatter()
+    format.numberStyle = .currency
+    format.maximumFractionDigits = 2
+  }
+
+
+  var body: some View {
+    ...
+    Text("Prix : \(prix as NSNumber, formatter: format)")
+    ...
+  }
+}
+
+Il est également possible d'utiliser cette syntaxe abrégée dans laquelle le format attendu est précisé dès l'instanciation du NumberFormatter.
+
+J'ai utilisé ici des styles différents afin d'illustrer d'autres possibilités.
+
+Ce format tiendra compte de la localisation. Par exemple, si on est en français du Canada, le séparateur de décimales sera une virgule et il n'y aura pas de séparateur de milliers.
+
+SwiftUI
+struct ContentView: View {
+  ...
+  let format: NumberFormatter = {
+    let numberFormatter = NumberFormatter()
+    numberFormatter.locale = Locale.current // ou forcer la localisation avec numberFormatter.locale = Locale(identifier: "fr_CA")
+    return numberFormatter
+
+  }()
+
+ 
+
+  var body: some View {
+    ...
+    Text("Points : \(points as NSNumber, formatter: format)")
+    ...
+  }
+}
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 13 février 2024
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.8
+Les optionnels (?, !, ??)
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+7.6
+Les énumérations
+7.5
+Les propriétés calculées
+7.4
+Les classes
+7.3
+Les structures
+7.2
+Les dictionnaires
+7.1
+Variables, constantes et types de données
+8.1
+Les tableaux Swift
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.8 Les optionnels (?, !, ??)
+Lorsqu'une variable peut prendre la valeur nil, on dira que c'est un optionnel. Dans d'autres langages, on utilise le terme nullable.
+
+Dans cette fiche :
+
+Déclaration
+Utilisation
+Opérateur de déballage forcé (!)
+Opérateur de fusion nil (??)
+Chaînage d'optionnels (?)
+Déclaration
+Pour déclarer un optionnel, il faut faire suivre son type par un point d'interrogation.
+
+Swift
+var valeur: Int?
+...
+valeur = 36
+...
+valeur = nil
+
+Autre exemple avec une chaîne de caractères :
+
+Swift
+var nom: String?
+...
+nom = "Annie"
+...
+nom = nil
+
+Le même résultat serait obtenu comme suit mais l'utilisation du point d'interrogation est préférable puisque plus facile à lire.
+
+Swift
+var nom: Optional<Int>
+
+Il est également possible d'utiliser les optionnels avec des types complexes.
+
+Swift
+var cartePigee: Carte? = nil
+
+Optionnels implicitement déballés
+Une autre technique pour déclarer une variable optionnelle est de faire suivre son type par un point d'exclamation. On aura alors une variable implicitement déballée (en anglais : implicitly unwrapped optionnal).
+
+Swift
+var nom: String!
+
+La différence entre un optionnel implicitement déballé (!) et un optionnel régulier (?), c'est qu'il sera possible d'accéder à l'optionnel implicitement déballé sans avoir recours à l'opérateur de déballage forcé (voir plus bas).
+
+Attention : l'utilisation d'un optionnel implicitement déballé est un compromis entre la commodité et la sécurité. En effet, ceci permet d'accéder à une variable sans devoir la faire suivre par l'opérateur de déballage forcé mais si on accède à cette variable alors que sa valeur est nil, l'application plantera comme c'est le cas avec un optionnel régulier.
+
+Tel que spécifié dans la documentation officielle de Swift, l'utilisation d'optionnels implicitement déballés devrait être réservée aux cas où il est clair qu'une variable optionnelle aura toujours une valeur différente de nil après sa première initialisation.
+
+Utilisation
+Swift fait une gestion serrée des optionnels. Il n'est pas possible d'utiliser une variable optionnelle régulière sans prendre les précautions adéquates.
+
+Si vous tentez d'utiliser un optionnel sans précaution, vous obtiendrez un message du genre « Value of optional type 'String?' must be unwrapped to a value of type 'String' ».
+
+Value of optional type 'String?' must be unwrapped to a value of type 'String'
+
+Opérateur de déballage forcé (!)
+Dans le cas où vous êtes absolument certains que la variable n'a pas la valeur nil, vous pouvez faire suivre son nom d'un point d'exclamation.
+
+Dans ce contexte, le point d'exclamation s'appelle opérateur de déballage forcé ou, en anglais, forced unwrapping operator.
+
+Swift
+Text(nom!)
+
+Mais attention : si jamais la variable avait la valeur nil, le programme planterait avec le message « Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value ».
+
+Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
+
+Il est donc plus prudent de faire la vérification avant d'utiliser le point d'exclamation.
+
+Swift
+if (nom != nil) {
+  Text(nom!)
+}
+
+Dans le cas où la variable est une instance d'une structure ou d'une classe, le point d'exclamation sera placé après le nom de l'objet, avant le nom de sa propriété.
+
+Swift
+Image(cartePigee!.image)
+
+Opérateur de fusion nil (??)
+Il est également possible d'utiliser l'opérateur de fusion nil' (Nil-Coalescing Operator) pour spécifier la valeur à utiliser si la variable vaut nil.
+
+Swift
+Text(nom ?? "Annie")
+
+En fait, l'opérateur de fusion nil est un raccourci de l'opérateur ternaire que l'on peut utiliser lorsqu'il faut vérifier si une variable a la valeur nil.
+
+L'instruction précédente est équivalente à celle-ci :
+
+Swift
+Text(nom != nil ? nom : "Annie")
+
+Chaînage d'optionnels (?)
+Lorsqu'un objet est optionnel ou qu'il contient des propriétés optionnelles, il est possible d'utiliser le chaînage d'optionnels (en anglais : optional chaining ou safe call) pour indiquer quoi faire lorsqu'une valeur nulle est rencontrée dans une chaîne d'appels.
+
+Il s'agit d'ajouter un point d'interrogation après le nom de la variable optionnelle. Ceci fait en sorte que le programme ne plantera pas s'il rencontre une valeur nulle. En dernier, on ajoute les doubles points d'interrogation pour indiquer quoi faire si une valeur nulle a été rencontrée dans la chaîne.
+
+Swift
+let valeur = unObjet.proprieteOptionnelle?.sousPropriete ?? "valeur par défaut"
+
+Swift
+let premier = items?.first ?? Item(code: "A", titre: "Item A")
+
+Pour plus d'information
+« Optional Chaining ». Swift. https://docs.swift.org/swift-book/documentation/the-swift-programming-language/optionalchaining/
+
+« Chaînage d'optionnels (Optional chaining) ». Hacking with Swift. https://www.hackingwithswift.com/read/fr/0/13/chainage-doptionnels-optional-chaining
+
+« Question mark (? vs ?. vs ?? vs ? :) in Swift ». Suneet. https://agrawalsuneet.github.io/blogs/question-mark-in-swift/
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 12 janvier 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Rapetisser le texteAccueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.9
+Liaison optionnelle (if let / guard let)
+7.8
+Les optionnels (?, !, ??)
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+7.6
+Les énumérations
+7.5
+Les propriétés calculées
+7.4
+Les classes
+7.3
+Les structures
+7.2
+Les dictionnaires
+7.1
+Variables, constantes et types de données
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.9 Liaison optionnelle (if let / guard let)
+Lorsqu'on travaille avec des optionnels, les instructions if let et guard let, qui utilisent le mécanisme de liaison optionnelle (en anglais : optional binding) permettent d'écrire du code élégant et efficace.
+
+Il s'agit de raccourcis pour utiliser une variable optionnelle de façon sécuritaire. Ils permettent d'exécuter une section de code seulement lorsque la variable ne contient pas la valeur nil.
+
+Voyons comment fonctionnent ces instructions.
+
+if let
+Prenons l'exemple d'une structure Personnage qui contient une propriété optionnelle nommée batailles. 
+
+Sans opérateur de liaison optionnelle, si on veut afficher le nombre de batailles d'une instance nommée personnage, on pourrait procéder comme suit :
+
+SwiftUI
+if personnage.batailles != nil {
+  Text("Le personnage \(personnage.nom) s'est battu \(personnage.batailles!.count) fois jusqu'ici.")
+}
+else {
+  Text("Le personnage \(personnage.nom) n'a livré aucune bataille à ce jour.")
+}
+
+Remarquez l'utilisation de l'opérateur de déballage forcé (!) qui est requise puisque la propriété batailles est déclarée en tant que valeur optionnelle.
+
+Le même résultat pourrait être obtenu à l'aide de l'opérateur de liaison optionnelle sans nécessiter le déballage de la propriété optionnelle.
+
+Cet opérateur permet de copier la valeur d'une variable dans une variable locale. Dans le cas où elle a la valeur nil, le code du else sera exécuté.
+
+SwiftUI   
+if let batailles = personnage.batailles {
+  Text("Le personnage \(personnage.nom) s'est battu \(batailles.count) fois jusqu'ici.")
+}
+else {
+  Text("Le personnage \(personnage.nom) n'a livré aucune bataille à ce jour.")
+}
+
+Vérifier plusieurs conditions dans le if let
+Il est possible de combiner plusieurs conditions dans un if let.
+
+Par exemple, on pourrait vérifier si un tableau optionnel n'est pas à nil et qu'il n'est pas vide.
+
+Il suffit de séparer les conditions par une virgule.
+
+SwiftUI
+if let batailles = personnage.batailles, batailles.count > 0 {
+  Text("Le personnage \(personnage.nom) s'est battu \(batailles.count) fois jusqu'ici.")
+}
+else {
+  Text("Le personnage \(personnage.nom) n'a livré aucune bataille à ce jour.")
+}
+
+guard let
+L'instruction guard let est généralement utilisée dans une fonction.
+
+Elle permet de sortir rapidement de la fonction lorsque l'expression est évaluée à nil.
+
+Swift
+func faireQuelqueChose(personnage: Personnage) {
+  guard let batailles = personnage.batailles else {
+    print("Le personnage \(personnage.nom) n'a livré aucune bataille à ce jour.")
+    return   // sort de la fonction
+  }
+
+  // le code qui suit est exécuté seulement si personnage.batailles a une valeur non-nil
+  ...
+}
+
+Pour plus d'information
+« Optionals and Unwrapping in Swift ». Swift anytime. https://www.swiftanytime.com/blog/optionals-and-unwrapping-in-swift
+
+« if let shorthand for unwrapping optionals ». Hackink with Swift. https://www.hackingwithswift.com/swift/5.7/if-let-shorthand
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 12 janvier 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.10
+L'instruction guard
+7.9
+Liaison optionnelle (if let / guard let)
+7.8
+Les optionnels (?, !, ??)
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+7.6
+Les énumérations
+7.5
+Les propriétés calculées
+7.4
+Les classes
+7.3
+Les structures
+7.2
+Les dictionnaires
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.10 L'instruction guard
+L'instruction guard de Swift est semblable à un if mais elle est plus rigoureuse. Elle permet de rediriger le contrôle hors de la portée actuelle lorsqu'une expression est évaluée à nil, ce qui garantit la validité des données pour la suite du code.
+
+Le bloc d'instructions qu'elle contient doit obligatoirement se terminer par return, break, continue ou throw.
+
+Swift
+guard let itemsJSON = try? JSONEncoder().encode(items) else {
+  print("Impossible d'encoder les items en JSON")
+  return
+}
+
+// ici, on a la garantie que itemsJSON a pu être initialisé
+
+Si le bloc ne se termine pas par un des mots-clés requis, vous obtiendrez un message du genre « 'guard' body must not fall through, consider using a 'return' or 'throw' to exit the scope ».
+
+Pour plus d'information
+« The guard keyword in Swift: early returns made easy ». Hacking with Swift. https://www.hackingwithswift.com/new-syntax-swift-2-guard
+
+« That “return” keyword in guard let statement in Swift ». Mumtaz Hussain. https://medium.com/@mumtaz.hussain/that-return-keyword-in-guard-let-statement-in-swift-eeacf88f6270
+
+« The Swift Guard Keyword ». Advanced Swift. https://www.advancedswift.com/when-to-use-guard-in-swift/
+
+« When to use guard let rather than if let ». Hacking with Swift. https://www.hackingwithswift.com/quick-start/understanding-swift/when-to-use-guard-let-rather-than-if-let
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 12 janvier 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.11
+Les fonctions génériques
+7.10
+L'instruction guard
+7.9
+Liaison optionnelle (if let / guard let)
+7.8
+Les optionnels (?, !, ??)
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+7.6
+Les énumérations
+7.5
+Les propriétés calculées
+7.4
+Les classes
+7.3
+Les structures
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.11 Les fonctions génériques
+Dans un programme Swift, lorsque vous rencontrez des paramètres placés entre des crochets angulaires < et > (en anglais, angle brackets), c'est que vous avez affaire à une fonction générique ou à un type générique.
+
+Concentrons-nous ici sur les fonctions génériques.
+
+Prenons pour exemple la fonction suivante :
+
+Swift
+func maFonction<T>(unParametre: T, unAutreParametre: T) {
+  ...
+}
+
+Cette fonction attend un paramètre nommé unParametre et un second nommé unAutreParametre. Ces paramètres peuvent être de n'importe quel type, en autant que les deux paramètres sont du même type.
+
+C'est pourquoi on place un T entre crochets angulaires et que ce même T est utilisé pour préciser le type des paramètres.
+
+Ainsi, il sera possible d'appeler la fonction comme suit :
+
+Swift
+maFonction(unParametre: 2, unAutreParametre: 4)
+
+ou encore :
+
+Swift
+maFonction(unParametre: "abc", unAutreParametre: "def")
+
+mais pas :
+
+Swift
+maFonction(unParametre: 5, unAutreParametre: "toto")
+
+Si on tente d'appeler la fonction sans respecter les types génériques, il y aura une erreur de compilation donc facile à identifier.
+
+Si on avait plutôt utilisé le type Any pour indiquer que les paramètres peuvent être de n'importe quel type, il n'aurait pas été possible de s'assurer lors de la compilation que les deux paramètres sont du même type.
+
+Ajouter une contrainte à un paramètre générique
+Il est possible d'ajouter une contrainte à un paramètre générique en exigeant que le paramètre réponde à un protocole donné ou hérite d'une classe donnée.
+
+Prenons le cas où notre fonction générique doit effectuer des calculs à partir des paramètres reçus. Cette fonction doit pouvoir recevoir n'importe quel type de données en autant que ce soit un nombre.
+
+Ici, le type doit répondre au protocole Numeric.
+
+Swift
+func effectuerUnCalcul<T: Numeric>(unParametre: T, unAutreParametre: T) -> T {
+  ...
+}
+
+Et dans le cas où les deux paramètres doivent être numériques mais pas nécessairement du même type :
+
+Swift
+func effectuerUnCalcul<T: Numeric, U: Numeric>(unParametre: T, unAutreParametre: U) -> Double {
+  // Il faudra effectuer des conversions de type car pour les calculs, Swift demande à ce que les deux opérandes soient de même type.
+  ...
+}
+
+Pour plus d'information
+« Generics ». Swift. https://docs.swift.org/swift-book/LanguageGuide/Generics.html
+
+« Understanding generics – part 1 ». Hacking with Swift. https://www.hackingwithswift.com/plus/intermediate-swift/understanding-generics-part-1
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 26 mars 2022
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.12
+L'opérateur ternaire
+7.11
+Les fonctions génériques
+7.10
+L'instruction guard
+7.9
+Liaison optionnelle (if let / guard let)
+7.8
+Les optionnels (?, !, ??)
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+7.6
+Les énumérations
+7.5
+Les propriétés calculées
+7.4
+Les classes
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.12 L'opérateur ternaire
+Un opérateur ternaire permet de faire une condition sur une seule ligne. C'est pour cette raison qu'on l'appelle parfois inline if.
+
+En Swift, il prend la forme :
+
+Swift
+condition ? à faire si vrai : à faire si faux
+
+Par exemple, on pourrait modifier la couleur du cadre d'un TextField lorsque la valeur entrée n'est pas valide.
+
+Swift
+TextField("", text: $telephone)
+  .border(valide ? Color.gray: Color.red)
+
+Pour plus d'information
+« Basic Operators - Ternary Conditional Operator ». Swift. https://docs.swift.org/swift-book/LanguageGuide/BasicOperators.html#ID71
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 23 janvier 2023
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.13
+Les fermetures (closures)
+7.12
+L'opérateur ternaire
+7.11
+Les fonctions génériques
+7.10
+L'instruction guard
+7.9
+Liaison optionnelle (if let / guard let)
+7.8
+Les optionnels (?, !, ??)
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+7.6
+Les énumérations
+7.5
+Les propriétés calculées
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.13 Les fermetures (closures)
+Une fermeture (en anglais : closure) est un bloc de code autonome qui peut être assigné à une variable.
+
+Swift
+// Code emprunté : Généré avec l'assistance de Claude AI (Anthropic) le 5 mai 2025
+
+let noms = ["Marie", "Jean", "Sophie", "Alexandre", "Emma"]
+
+
+// Utilisation d'une fermeture pour trier les noms par longueur
+let nomsTries = noms.sorted { (nom1, nom2) -> Bool in
+  return nom1.count < nom2.count
+}
+
+
+print(nomsTries)
+// Fin du code emprunté
+
+ 
+
+Pour plus d'information
+« Swift de Scratch: Fermetures ». Envato Tuts. https://code.tutsplus.com/fr/swift-de-scratch-fermetures--cms-23138t
+
+« Closures ». Swift. https://docs.swift.org/swift-book/documentation/the-swift-programming-language/closures/
+
+« Fermeture (Closure), Application partielle et Curryfication en Swift (Partie 1/3) ». Medium. https://medium.com/@dmorard1/fermeture-closure-application-partielle-et-curryfication-en-swift-partie-1-3-4c2c6f2bce67
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 5 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+7.14
+Les opérateurs d'intervalle
+7.13
+Les fermetures (closures)
+7.12
+L'opérateur ternaire
+7.11
+Les fonctions génériques
+7.10
+L'instruction guard
+7.9
+Liaison optionnelle (if let / guard let)
+7.8
+Les optionnels (?, !, ??)
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+7.6
+Les énumérations
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Swift
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+7.14 Les opérateurs d'intervalle
+Pour travailler avec des intervalles, Swift met à notre disposition deux opérateurs :
+
+l'opérateur d'intervalle fermé : ...
+l'opérateur d'intervalle semi-ouvert : ..<
+Opérateur d'intervalle fermé
+On l'appelle aussi opérateur de plage fermée. En anglais, on l'appelle closed range operator.
+
+Il est représenté par trois points : ...
+
+Il indique que les bornes sont incluses dans l'intervalle.
+
+Ainsi, 1...3 représente une plage qui contient les nombres 1, 2 et 3.
+
+Swift
+for nombre in 1...3 {
+  print(nombre)
+}
+
+Fenêtre de débogage
+1
+2
+3
+
+Opérateur d'intervalle semi-ouvert
+On l'appelle aussi opérateur de plage semi-ouverte. En anglais, on l'appelle half-open range operator.
+
+Il est représenté par deux points suivis du signe plus petit que : ..<
+
+Il indique que la borne de gauche est incluse dans l'intervalle mais pas celle de droite.
+
+Ainsi, 1..<3 représente une plage qui contient les nombres 1 et 2.
+
+Swift
+for nombre in 1..<3 {
+  print(nombre)
+}
+
+Fenêtre de débogage
+1
+2
+
+Pour plus d'information
+« Basic Operators - Range Operators ». Swift. https://docs.swift.org/swift-book/documentation/the-swift-programming-language/basicoperators/#Range-Operators
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 16 janvier 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+8.1
+Les tableaux Swift
+7.14
+Les opérateurs d'intervalle
+7.13
+Les fermetures (closures)
+7.12
+L'opérateur ternaire
+7.11
+Les fonctions génériques
+7.10
+L'instruction guard
+7.9
+Liaison optionnelle (if let / guard let)
+7.8
+Les optionnels (?, !, ??)
+7.7
+L'interpolation de chaînes (interprétation d'une variable dans une chaîne)
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les tableaux
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+Les tableaux
+8.1 Les tableaux Swift
+Les tableaux en Swift ressemblent beaucoup aux tableaux en PHP.
+
+Par contre, tous les éléments du tableau doivent avoir le même type.
+
+Swift
+let monTableau = ["valeur 1", "valeur 2", "valeur 3"]
+
+Cette syntaxe permet d'initialiser un tableau plus facilement quand les éléments ont tous la même valeur au départ.
+
+Swift
+var monTableau = Array(repeating: "", count: 10)
+
+Il est possible de déclarer un tableau vide à condition de spécifier son type.
+
+Swift
+var monTableau: [String] = []
+
+Cette autre syntaxe est équivalente. On dira qu'elle utilise l'inférence de type (c'est-à-dire que le type n'est pas spécifié). Elle appelle le constructeur du type Array avec le type String : [String]()
+
+Swift
+var monTableau = [String]()
+
+Tableau d'instances d'une structure
+Un tableau peut contenir n'importe quel type de données, incluant des instances d'une structure.
+
+Swift
+var items: [Item] = [
+  Item(id: 1, code: "abc", titre: "Une table"),
+  Item(id: 2, code: "def", titre: "Une chaise")
+]
+
+Il est également possible d'ajouter des éléments au tableau dans un deuxième temps.
+
+Swift
+var items: [Item] = []
+
+items.append(Item(id: 1, code: "abc", titre: "Une table"))
+
+Tableau à deux dimensions
+Voici la syntaxe pour déclarer un tableau à deux dimensions. Ici, c'est un tableau de Int et il est vide au départ.
+
+Swift
+var monTableau: [[Int]] = []
+
+On aurait pu initialiser le tableau dès sa déclaration.
+
+Swift
+var monTableau: [[Int]] = [[0, 1, 2, 3, 4], [10, 11, 12, 13, 14]]
+
+Pour donner la même valeur de départ à tous les éléments :
+
+Swift
+var monTableau: [[Int]] = Array(repeating: Array(repeating: 0, count: 5), count: 6)
+
+Pour modifier une valeur de ce tableau :
+
+Swift
+monTableau[x][y] = 3
+
+Tableau avec données variées
+Si jamais vous avez besoin d'un tableau qui contient différents types de données, la solution consiste à déclarer un protocole, de créer différentes structures qui répondent à ce protocole et d'utiliser ce protocole comme type de données dans le tableau.
+
+Pour plus d'information
+« Array ». Apple. https://developer.apple.com/documentation/swift/array
+
+« Collection Types ». Swift. https://docs.swift.org/swift-book/LanguageGuide/CollectionTypes.html
+
+« Constants, Variables and Types ». Dimitri Racordon. https://kyouko-taiga.github.io/swift-thoughts/tutorial/chapter-1/
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 24 janvier 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+8.2
+Quelques méthodes utiles pour manipuler des tableaux
+8.1
+Les tableaux Swift
+7.14
+Les opérateurs d'intervalle
+7.13
+Les fermetures (closures)
+7.12
+L'opérateur ternaire
+7.11
+Les fonctions génériques
+7.10
+L'instruction guard
+7.9
+Liaison optionnelle (if let / guard let)
+7.8
+Les optionnels (?, !, ??)
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les tableaux
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+8.2 Quelques méthodes utiles pour manipuler des tableaux
+Lorsque vous devez manipuler un tableau en Swift, vous avez à votre disposition de nombreuses méthodes, par exemple :
+
+allSatisfy()
+contains()
+count()
+dropFirst()
+first()
+firstIndex()
+insert()
+map()
+max()
+min()
+randomElement()
+reduce()
+remove()
+replaceSubrange()
+shuffle()
+sort()
+sorted() (même chose que sort() mais retourne un tableau trié sans modifier l'original)
+starts()
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 5 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+8.3
+Boucler dans un tableau
+8.2
+Quelques méthodes utiles pour manipuler des tableaux
+8.1
+Les tableaux Swift
+7.14
+Les opérateurs d'intervalle
+7.13
+Les fermetures (closures)
+7.12
+L'opérateur ternaire
+7.11
+Les fonctions génériques
+7.10
+L'instruction guard
+7.9
+Liaison optionnelle (if let / guard let)
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les tableaux
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+8.3 Boucler dans un tableau
+Je vous présente ici quelques techniques pour boucler dans les éléments d'un tableau.
+
+for
+La boucle for permet de boucler facilement dans les éléments d'un tableau.
+
+Cette syntaxe prend tout son sens si vous avez pris soin de donner un nom au pluriel au tableau, par exemple valeurs.
+
+À l'intérieur de la boucle, l'élément qui est en cours de traitement portera ce nom mais au singulier, par exemple valeur.
+
+Swift
+for valeur in valeurs {
+  print(valeur)
+}
+
+La fonction zip() permet de créer une séquence de paires dont les valeurs sont tirées de deux tableaux.
+
+Autrement dit, elle associe le premier élément du premier tableau avec le premier élément du second tableau et ainsi de suite.
+
+Swift
+let films: [String] = ["Harry Potter", "Seigneur des anneaux", "Star Wars"]
+let acteurs: [String] = ["Daniel Radcliffe", "Viggo Mortensen", "Mark Hamill"]
+
+
+for(film, acteur) in zip(films, acteurs) {
+  print("\(film): \(acteur)")
+}
+
+Voici un autre exemple qui permet de retrouver les indices d'un tableau.
+
+Swift
+let mots: [String] = ["Allô", "Bonjour", "Salut"]
+
+for(i, mot) in zip(mots.indices, mots) {
+  print("\(i): \(mot)")
+}
+
+La méthode enumerated() permet elle aussi de travailler avec un tableau et ses indices.
+
+Swift
+let mots: [String] = ["Allô", "Bonjour", "Salut"]
+
+for(i, mot) in mots.enumerated() {
+  print("\(i): \(mot)")
+}
+
+forEach()
+Il est également possible d'utiliser la méthode forEach().
+
+Swift
+let mots: [String] = ["Allô", "Bonjour", "Salut"]
+
+
+mots.forEach{ mot in
+  print(mot)
+}
+
+Voici quelques exemples supplémentaires avec forEach().
+
+Swift
+let mots: [String] = ["Allô", "Bonjour", "Salut"]
+
+mots.indices.forEach { i in
+  print("\(i): \(mots[i])")
+}
+
+Ici, on travaille avec la méthode enumerated().
+
+Swift
+let mots: [String] = ["Allô", "Bonjour", "Salut"]
+
+mots.enumerated().forEach { (i, mot) in
+  print("\(i): \(mot)")
+}
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 26 janvier 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+8.4
+Vérifier si le tableau contient une valeur donnée
+8.3
+Boucler dans un tableau
+8.2
+Quelques méthodes utiles pour manipuler des tableaux
+8.1
+Les tableaux Swift
+7.14
+Les opérateurs d'intervalle
+7.13
+Les fermetures (closures)
+7.12
+L'opérateur ternaire
+7.11
+Les fonctions génériques
+7.10
+L'instruction guard
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les tableaux
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+8.4 Vérifier si le tableau contient une valeur donnée
+La méthode contains() permet de vérifier si une valeur fait partie d'un tableau.
+
+Swift
+if valeurs.contains("abc") {
+  ...
+}
+
+Dans le cas où on a un tableau d'objets, contains() permet également de vérifier si un des objets a une propriété avec la valeur recherchée.
+
+Swift
+var items: [Item] = [
+  Item(id: 1, code: "abc", titre: "Une table"),
+  Item(id: 2, code: "def", titre: "Une chaise")
+]
+
+if items.contains(where: { item in
+  item.code == "abc"
+}) {
+  ...
+}
+
+Cet extrait de code permet de retrouver l'élément qui correspond au critère de recherche.
+
+Swift
+let itemTrouve = items.first { item in
+  item.code == "abc"
+}
+
+ 
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 23 janvier 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+8.6
+Recherche dans un tableau ou dans un dictionnaire
+8.5
+allSatisfy()
+8.4
+Vérifier si le tableau contient une valeur donnée
+8.3
+Boucler dans un tableau
+8.2
+Quelques méthodes utiles pour manipuler des tableaux
+8.1
+Les tableaux Swift
+7.14
+Les opérateurs d'intervalle
+7.13
+Les fermetures (closures)
+7.12
+L'opérateur ternaire
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les tableaux
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+8.6 Recherche dans un tableau ou dans un dictionnaire
+Tableau simple
+La méthode firstIndex(of:) permet de retrouver la position d'un élément dans un tableau.
+
+Swift
+let monTableau = ["Premier élément", "Deuxième élément", "Troisième élément"]
+...
+let position = monTableau.firstIndex(of: "Deuxième élément")   // 1
+
+Tableau de structures
+La méthode firstIndex(where:) permet d'effectuer une recherche plus diversifiée. Elle prend en paramètre une fonction anonyme qui permet de rechercher autre chose qu'une égalité.
+
+Entre autres, elle permet de trouver la position d'un élément dans un tableau de structures.
+
+Swift
+struct Ami {
+  var nomFamille: String
+  var prenom: String
+}
+
+...
+
+let amis: [Ami] = [
+  Ami(nomFamille: "Lacasse", prenom: "Toto"),
+  Ami(nomFamille: "Gagnon", prenom: "Annie"),
+  Ami(nomFamille: "Girard", prenom: "Andréanne")
+]
+...
+
+if let position = amis.firstIndex(where: {
+  $0.prenom == "Annie"
+}) {
+  nomFamille = amis[position].nomFamille
+}
+else {
+  nomFamille = "personne"
+}
+
+Dictionnaire
+Pour rechercher la valeur qui correspond à une clé, il suffit d'accéder directement à cette valeur à partir de la clé.
+
+Si la clé n'existe pas, on aura nil.
+
+C'est pourquoi il faut prévoir ce qui se passera si jamais la clé n'existe pas. Ici, j'ai choisi d'imprimer le mot « aucun ».
+
+Swift
+let monDictionnaire:[String:String] = ["Nom":"Annie Gagnon", "Spécialité":"SwiftUI", "Ville":"Victoriaville"]
+
+print(monDictionnaire["Nom"] ?? "aucun")   // Annie Gagnon
+print(monDictionnaire["Téléphone"] ?? "aucun")   // aucun
+
+Il aurait aussi été possible de gérer le cas où la clé n'existe pas comme suit :
+
+Swift
+let monDictionnaire:[String:String] = ["Nom":"Annie Gagnon", "Spécialité":"SwiftUI", "Ville":"Victoriaville"]
+
+
+if let valeur = monDictionnaire["Nom"] {
+  print(valeur)
+}
+else {
+  print("aucun")
+
+}
+
+Pour rechercher la clé qui correspond à une valeur dans un dictionnaire, il faut faire appel aux méthodes key() et value().
+
+Swift
+let monDictionnaire:[String:Int] = ["ABC":10, "DEF":3, "GHI":8]
+
+if let cle = monDictionnaire.first(where: { $0.value == 3 })?.key {
+  print(cle)   // "DEF"
+}
+
+ 
+
+Pour plus d'information
+« How To Find an Item in an Array in Swift ». LearnAppMaking.com. https://learnappmaking.com/find-item-in-array-swift/
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 13 février 2023
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+9.1
+Comment Swift représente les dates
+8.7
+Trier un tableau
+8.6
+Recherche dans un tableau ou dans un dictionnaire
+8.5
+allSatisfy()
+8.4
+Vérifier si le tableau contient une valeur donnée
+8.3
+Boucler dans un tableau
+8.2
+Quelques méthodes utiles pour manipuler des tableaux
+8.1
+Les tableaux Swift
+7.14
+Les opérateurs d'intervalle
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les dates
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+Les dates
+9.1 Comment Swift représente les dates
+À l'interne, Swift utilise un nombre de type Double pour représenter une date. Ce nombre correspond aux secondes écoulées entre la date représentée et le 1er janvier 2001 (début du troisième millénaire) dans le fuseau horaire GMT (Greenwich Mean Time).
+
+Par exemple, si une date représente le 8 mai 2024 à 13:52:35 dans le fuseau horaire de Montréal, Swift représentera cette date à l'interne par le nombre 736883555.662463.
+
+Il est à noter que ceci diffère de plusieurs langages, tels que PHP, pour qui la date de référence est le 1er janvier 1970 (époque Unix).
+
+Prenons l'exemple de dates créées ainsi :
+
+Swift
+let dateFormatter = DateFormatter()
+dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+let date1String = "2001-01-01 00:00:00"
+let date2String = "1970-01-01 00:00:00"
+let date1 = dateFormatter.date(from: date1String)!   // on sait que la chaîne représente une date au bon format donc ok de mettre le !
+let date2 = dateFormatter.date(from: date2String)!
+
+Si on place un point d'arrêt dans le code juste après ces initialisations et qu'on vérifie le contenu des variables date1 et date2, voici ce qu'on obtient.
+
+Résultat à l'écran
+(lldb) po date1
+▿ 2001-01-01 05:00:00 +0000
+  - timeIntervalSinceReferenceDate : 18000.0
+
+(lldb) po date2
+▿ 1970-01-01 05:00:00 +0000
+  - timeIntervalSinceReferenceDate : -978289200.0
+
+On voit que date1 corresopnd au 1er janvier 2001 à 5h, représenté par le nombre 18000.0. Pourtant, on se serait attendus à avoir la valeur 0.
+
+La différence est due au fuseau horaire. Par défaut, la date créée utilise le fuseau horaire de l'appareil alors que la représentation interne utilise le fuseau horaire GMT. Dans le cas présent, la date a été créée avec le fuseau horaire de Montréal, soit 5 heures (18000 secondes) de différence avec le fuseau GMT.
+
+Ce qu'il faut comprendre, c'est que la représentation interne est toujours à l'heure neutre. C'est le format lisible de la date qui s'ajuste selon le fuseau horaire et ce, autant lors de l'initialisation avec un DateFormatter que lors de l'affichage.
+Cette démonstration illustre clairement le fait que la date de référence n'est pas le 1er janvier 1970 puisque la seconde date est représentée par un gros nombre négatif. Une valeur négative représente une date avant la date de référence.
+
+Refaisons l'exercice mais cette fois, en créant la date au fuseau horaire GMT.
+
+Swift
+let dateFormatter = DateFormatter()
+dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
+let date3String = "2001-01-01 00:00:00"
+let date3 = dateFormatter.date(from: date1String)!
+
+Cette fois, on obtient bel et bien le nombre 0.
+
+Résultat à l'écran
+(lldb) po date3
+▿ 2001-01-01 00:00:00 +0000
+  - timeIntervalSinceReferenceDate : 0.0
+
+Afficher une date à partir de sa représentation interne
+Si vous avez en main la représentation interne d'une date, sans avoir recours à la programmation, il est difficile de décoder quelle date ce nombre représente.
+
+Par exemple, lorsqu'une date est enregistrée dans une base de données à l'aide de SwiftData, c'est sa représentation interne qui est enregistrée.
+
+Pour retrouver une date à partir de sa représentation interne :
+
+Swift
+let date4 = Date(timeIntervalSinceReferenceDate: 0)
+print(date4)   // affiche 2001-01-01 00:00:00 +0000, soit la date au fuseau horaire GMT (indiqué par le +0000)
+print(dateFormatter.string(from: date4))   // affiche 2000-12-31 19:00:00, soit 5h avant l'heure GMT pour être au fuseau horaire de Montréal
+
+Autre exemple :
+
+Swift
+let date5 = Date(timeIntervalSinceReferenceDate: 737038273.680801)
+print(date5)   // affiche 2024-05-10 12:51:13 +0000
+print(dateFormatter.string(from: date5))   // affiche 2024-05-10 08:51:13
+
+Retrouver la représentation interne d'une date
+Inversement, si on a en main une date et qu'on désire voir sa représentation interne, on peut procéder comme suit :
+
+Swift
+let representationInterne = date3.timeIntervalSinceReferenceDate
+
+print(representationInterne)   // affiche 0.0
+
+Convertir pour avoir la date butoir du 1er janvier 1970
+Swift a prévu un mécanisme pour convertir une date afin qu'elle représente le nombre de secondes entre la date et le 1er janvier 1970.
+
+Swift
+let conversionDateInterne3 = date3.timeIntervalSince1970
+print(conversionDateInterne3)   // affiche 978307200.0
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 18 juin 2024
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+9.2
+Initialiser une date avec Swift
+9.1
+Comment Swift représente les dates
+8.7
+Trier un tableau
+8.6
+Recherche dans un tableau ou dans un dictionnaire
+8.5
+allSatisfy()
+8.4
+Vérifier si le tableau contient une valeur donnée
+8.3
+Boucler dans un tableau
+8.2
+Quelques méthodes utiles pour manipuler des tableaux
+8.1
+Les tableaux Swift
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les dates
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+9.2 Initialiser une date avec Swift
+Le langage Swift propose la structure Date pour représenter des dates et heures.
+
+Date et heure actuelles
+Pour initialiser une variable qui représente le moment présent :
+
+Swift
+let maintenant = Date()
+
+ou
+
+Swift
+let maintenant = Date.now
+
+La date ainsi créée tiendra compte du fuseau horaire de l'appareil et du fait qu'on est en heure normale ou avancée.
+
+Représenter une date et une heure données
+Dans le cas où il faut représenter un moment donné, il faut travailler avec un DateFormatter().
+
+Cet extrait de code permet de créer une instance de Date à partir d'une chaîne de caractères.
+
+Swift
+let dateFormatter = DateFormatter()
+dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+let dateTransactionString = "2024-02-26 08:39:00"
+
+if let dateTransaction = dateFormatter.date(from: dateTransactionString) {
+  // ici, l'instance de Date est correctement initialisée
+}
+
+La date ainsi créée sera de type Date?. Le type est un optionnel puisque si on fournit une chaîne qui ne correspond pas à une date valide, la variable prendra la valeur nil.
+
+Fuseau horaire
+Par défaut, la date créée avec un DateFormatter est basée sur le fuseau horaire de l'appareil. Cependant, sa représentation interne est toujours basée sur fuseau horaire GMT (Greenwich Mean Time).
+
+Donc, si la date créée est au fuseau horaire de Montréal, sa représentation interne sera ajustée pour représenter l'heure GMT. Par exemple, s'il est 7h43 à Montréal, la représentation interne aura 5 heures de moins, soit 2h43.
+
+Si la date doit être affichée pour un autre fuseau horaire, il est possible de forcer un fuseau horaire comme suit :
+
+Swift
+let dateFormatter = DateFormatter()
+dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+let dateTransactionString = "2024-02-26 08:39:00"
+dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
+
+if let dateTransaction = dateFormatter.date(from: dateTransactionString) {
+  // ici, l'instance de Date est correctement initialisée
+}
+
+Créer une chaîne à partir d'une date
+Si vous avez besoin d'effectuer l'opération inverse, c'est-à-dire créer une chaîne à partir d'une instance de Date, consultez la fiche « Convertir une date en chaîne ».
+
+Pour plus d'information
+« Introduction to Date and Time Programming in Swift, Part 1 ». Auth0 by Otka. https://auth0.com/blog/introduction-date-time-programming-swift-1/
+
+ 
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 10 mai 2024
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N] Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+9.3
+Convertir une date en chaîne
+9.2
+Initialiser une date avec Swift
+9.1
+Comment Swift représente les dates
+8.7
+Trier un tableau
+8.6
+Recherche dans un tableau ou dans un dictionnaire
+8.5
+allSatisfy()
+8.4
+Vérifier si le tableau contient une valeur donnée
+8.3
+Boucler dans un tableau
+8.2
+Quelques méthodes utiles pour manipuler des tableaux
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les dates
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+9.3 Convertir une date en chaîne
+Il existe de nombreuses techniques pour convertir une date en chaîne.
+
+Peu importe la technique utilisée, il faut se rappeler qu'une date est sujette aux configurations régionales ainsi qu'à la langue. L'apparence de la date dépendra donc des configurations de l'appareil ou du simulateur (Réglages / Général / Langue et région).
+
+Voici deux exemples de configurations que l'on pourrait retrouver sur un téléphone.
+
+fr_CA en_US
+
+Interpolation de chaîne
+L'interpolation de chaîne permet de convertir à peu près n'importe quel type de donnée en chaîne de caractère.
+
+Par contre, nous n'avons aucun contrôle sur la façon dont les informations seront converties.
+
+SwiftUI
+Text("\(Date.now)")
+
+En français, la date sera au format : jeudi 11 avril 2024 à 15:28:10 heure avancée de l'Est
+
+En anglais, on verra plutôt : Thursday, April 11, 2024 at 3:28:10 PM Eastern Daylight Saving Time
+
+Text avec style
+La vue Text attend normalement un paramètre de type chaîne.
+
+Il est également possible de lui passer un premier paramètre de type Date suivi du paramètre style pour préciser comment afficher cette date.
+
+SwiftUI
+Text(Date.now, style: .date)
+
+En français : 11 avril 2024
+
+En anglais : April 11, 2024
+
+.formatted() 
+La méthode .formatted() permet de préciser le format d'affichage d'une date.
+
+Il existe un format par défaut. Il est également possible de lui passer des paramètres afin de préciser le format.
+
+SwiftUI
+struct ContentView: View {
+  var dateTransaction = Date.now.formatted()
+
+  var body: some View {
+    Text(dateTransaction)
+  }
+}
+
+En français : 2024-04-11 15:28
+
+En anglais : 2024/4/11, 3:28 PM
+
+Voici un autre exemple. Cette fois, des paramètres ont été ajoutés pour préciser le format.
+
+SwiftUI
+struct ContentView: View {
+  var dateTransaction = Date.now.formatted(date: .abbreviated, time: .shortened)
+
+  var body: some View {
+    Text(dateTransaction)
+  }
+}
+
+En français : 11 avr. 2024 à 15:28
+
+En anglais : Apr 11, 2024 at 3:28 PM
+
+Voici quelques exemples des formats possibles.
+
+date	time	français	anglais
+.abbreviated	.shortened	11 avr. 2024 à 15:28	Apr 11, 2024 at 3:28 PM
+.long	.standard	11 avril 2024 à 15:28:10	April 11, 2024 at 3:28:10 PM
+.complete	.complete	jeudi 11 avril 2024 à 15:28:10 HAE	Thursday, April 11, 2024 at 3:28:10 PM EDT
+.numeric	.omitted	2024-04-11	2024/4/11
+.omitted	.standard	15:28:10	3:28:10 PM
+DateFormatter()
+Pour avoir un maximum de contrôle sur le format de la date, il est possible de travailler avec un DateFormatter().
+
+La syntaxe est très semblable à celle utilisée pour instancier une date. La seule différence est l'utilisation de la méthode string().
+
+Swift
+struct ContentView: View {
+  var dateTransaction: String
+
+  init() {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+    dateTransaction = dateFormatter.string(from: Date.now)
+  }
+
+  var body: some View {
+    Text(dateTransaction)
+  }
+}
+
+Dans cet exemple, le résultat sera toujours au même format puisqu'aucun mot n'est présent.
+
+La date apparaîtra au format : 2024-04-11 15:28:10
+
+Attention : il aurait été possible de demander le mois en toutes lettres en changeant le format comme ceci :
+
+SwiftUI
+dateFormatter.dateFormat = "dd MMMM yyyy"
+
+Sans précautions supplémentaires, on obtiendrait :
+
+En français : 11 avril 2024
+
+En anglais : 11 April 2024   Ouch!
+
+Bien qu'il soit possible de remédier à ce problème, il est préférable d'utiliser une des techniques présentées plus haut pour que la date respecte le format de localisation.
+
+Pour plus d'information
+« Preparing dates, currencies, and numbers for translation ». Apple. https://developer.apple.com/documentation/xcode/preparing-dates-numbers-with-formatters
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 13 avril 2024
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+10.2
+Button
+10.1
+Text
+9.3
+Convertir une date en chaîne
+9.2
+Initialiser une date avec Swift
+9.1
+Comment Swift représente les dates
+8.7
+Trier un tableau
+8.6
+Recherche dans un tableau ou dans un dictionnaire
+8.5
+allSatisfy()
+8.4
+Vérifier si le tableau contient une valeur donnée
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Quelques vues SwiftUI
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+10.2 Button
+Dans cette fiche :
+
+Apparence du bouton
+Texte cliquable
+Style prédéfini
+Rôle
+Modifieurs
+Emplacement des modifieurs
+Image cliquable
+Action du bouton
+Bouton inactif
+Apparence du bouton
+Un bouton peut prendre n'importe quelle apparence.
+
+Je vous présente ici quelques exemples.
+
+Dans les premiers exemples, le bouton ne fait rien. Je vous montre plus bas comment spécifier l'action qu'il doit réaliser.
+
+Texte cliquable
+Au plus simple, le bouton sera un texte cliquable.
+
+SwiftUI
+Button("Cliquez ici") {
+  // traitement ici
+}
+
+Vous verrez souvent une syntaxe qui utilise un libellé pour identifier certains paramètres.
+
+SwiftUI
+Button("Cliquez ici", action: {
+  // traitement ici
+})
+
+Le même résultat peut être obtenu avec ceci :
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+}
+
+Bouton
+
+Style prédéfini
+Il existe quelques styles prédéfinis qui permettent d'obtenir rapidement un bouton plus intéressant.
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+}
+.buttonStyle(.bordered)
+
+Button
+
+Rôle
+Le bouton peut avoir un rôle qui aura un impact sur son apparence.
+
+Dans certains contextes, le rôle influencera même la position du bouton par rapport aux autres boutons afin d'assurer une meilleure cohésion entre les applications.
+
+Voici un exemple de bouton avec le rôle .destructive, qui devrait être utilisé lorsque le bouton permet de supprimer des données ou d'effectuer une opération irréversible.
+
+SwiftUI
+Button(
+  role: .destructive,
+  action: {
+    // traitement ici
+}) {
+  Text("Cliquez ici")
+}
+.buttonStyle(.bordered)
+
+Button
+
+Modifieurs
+Il est possible d'ajouter des modifieurs pour donner au texte l'apparence de notre choix.
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+    .padding()
+    .foregroundColor(Color.white)
+    .background(Color.orange)
+    .cornerRadius(15.0)
+}
+
+Bouton
+
+Emplacement des modifieurs
+Dans la majorité des cas, il faut appliquer les modifieurs à ce qui définit l'apparence du bouton (ici : Text()).
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+    .padding(50)
+    .foregroundColor(Color.white)
+    .background(Color.orange)
+    .cornerRadius(15.0)
+}
+
+Si vous appliquez les modifieurs au bouton, il pourrait arriver que le bouton ne soit pas entièrement cliquable.
+
+Dans cet exemple, puisque le bouton comprend un gros padding, seule la partie centrale du bouton pourra être cliquée.
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+}
+.padding(50)
+.foregroundColor(Color.white)
+.background(Color.orange)
+.cornerRadius(15.0)
+
+Ces deux syntaxes sont équivalementes et causent le même problème.
+
+SwiftUI
+Button("Cliquez ici", action: {
+  // traitement ici
+})
+.padding(50)
+.foregroundColor(Color.white)
+.background(Color.orange)
+.cornerRadius(15.0)
+
+Par contre, certains modifieurs devront impérativement être appliqués au bouton, par exemple si vous désirez modifier la position par programmation.
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+    .padding(50)
+    .foregroundColor(Color.white)
+    .background(Color.orange)
+    .cornerRadius(15.0)
+}
+.position(positionX, positionY)
+
+Autre exemple avec un ombrage :
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+    .padding()
+    .frame(height: 100)
+    .foregroundColor(Color.white)
+    .font(.title)
+    .background(Color.red)
+    .cornerRadius(15.0)
+    .shadow(color: Color.gray, radius: 2, x: CGFloat(2), y: CGFloat(2))
+}
+
+Bouton
+
+Autre exemple avec un dégradé :
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+    .padding()
+    .foregroundColor(.black)
+    .background(LinearGradient(gradient: Gradient(colors: [.white, .gray]), startPoint: .top, endPoint: .bottom))
+    .border(Color(red: 0.9, green: 0.9, blue: 0.9), width: 1)
+}
+
+Bouton
+
+Image cliquable
+Le bouton peut aussi être sous forme d'image.
+
+Ici, j'ai choisi de placer du texte par-dessus l'image et d'utiliser des modifieurs pour obtenir un résultat plus esthétique. Bon, on s'en reparlera pour l'esthétisme, ça parait que je ne suis pas graphiste ;-)
+
+SwiftUI
+Button(action: {
+  // traitement ici
+}) {
+  ZStack {
+    Image("texture")
+      .frame(width: 140, height: 45)
+      .cornerRadius(10)
+    Text("Cliquez ici")
+      .fontWeight(.bold)
+      .foregroundColor(.white)
+      .shadow(color: Color.black, radius: 5)
+  }
+}
+
+Bouton
+
+Action du bouton
+L'action du bouton peut être spécifiée dans une fonction anonyme ou encore dans une fonction nommée.
+
+SwiftUI
+Button("Cliquez ici", action: {
+  if reponse == reponseValide {
+    ...
+  }
+})
+
+ou
+
+SwiftUI
+Button("Cliquez ici", action: {traiterReponse()})
+
+Lorsque le traitement consiste à appeler une seule fonction et que cette fonction ne reçoit pas de paramètre, il est possible de laisser tomber les accolades de l'action ainsi que les parenthèses de la fonction.
+
+SwiftUI
+Button("Cliquez ici", action: traiterReponse)
+
+Bouton inactif
+Un bouton peut être désactivé à l'aide du modifieur .disabled().
+
+Ce modifieur prend en paramètre une condition qui, si elle est évaluée à true, rendra le bouton inactif.
+
+SwiftUI
+@State private var desactiverBouton: Bool = false
+...
+Button(action: {
+  // traitement ici
+}) {
+  Text("Cliquez ici")
+}
+.buttonStyle(.bordered)
+.disabled(desactiverBouton)
+
+Sans disabled
+
+Avec disabled
+
+Bouton activé	Bouton désactivé
+Pour plus d'information
+« Button ». Apple. https://developer.apple.com/documentation/swiftui/button
+
+« Mastering SwiftUI Buttons: How to Create and Customise Button ». SwiftyPlace. https://www.swiftyplace.com/blog/mastering-swiftui-buttons-a-comprehensive-guide-to-creating-and-customizing-buttons
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 1 avril 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+10.4
+Message popup avec .alert()
+10.3
+Color
+10.2
+Button
+10.1
+Text
+9.3
+Convertir une date en chaîne
+9.2
+Initialiser une date avec Swift
+9.1
+Comment Swift représente les dates
+8.7
+Trier un tableau
+8.6
+Recherche dans un tableau ou dans un dictionnaire
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Quelques vues SwiftUI
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+10.4 Message popup avec .alert()
+La méthode alert() permet d'afficher une alerte sous forme de boîte de dialogue (popup).
+
+Son principe est le suivant : on appelle la méthode en fournissant notamment une valeur au paramètre isPresented. La valeur de ce paramètre doit provenir d'une variable avec liaison, donc précédée par un signe $. Ce peut être par exemple une variable déclarée avec l'attribut @State.
+
+Le popup s'affichera seulement quand ce paramètre prendra la valeur true.
+
+Par défaut, le message s'affichera dans une boîte avec un bouton OK qui permet de la refermer.
+
+SwiftUI
+struct ContentView: View {
+  @State private var afficherAlerte: Bool = false
+
+  var body: some View {
+    Button("Commander") {
+      afficherAlerte = true
+    }
+    .alert("Votre commande a été enregistrée!", isPresented: $afficherAlerte) {
+    }
+  }
+}
+
+ou, si votre bouton utilise cette autre syntaxe :
+
+SwiftUI
+Button(action: {
+  afficherAlerte = true
+}) {
+  Text("Commander")
+}
+.alert("Votre commande a été enregistrée!", isPresented: $afficherAlerte) {
+}
+
+Alerte avec bouton par défaut
+
+Il est possible de changer le texte de ce bouton en définissant un autre bouton dont le rôle est .cancel.
+
+SwiftUI
+Button("Supprimer") {
+  afficherAlerte = true
+}
+.alert("Des frais de livraison seront ajoutés à votre facture.", isPresented: $afficherAlerte) {
+  Button("Je comprends", role: .cancel) {
+  }
+}
+
+Alerte avec bouton personnalisé
+
+Au besoin, vous pouvez ajouter du code qui sera exécuté lors du clic sur le bouton.
+
+SwiftUI
+Button(action: {
+  if ... {
+    termine = true
+  }
+}) {
+  Text("Soumettre")
+}
+.alert("Partie terminée!", isPresented: $termine) {
+  Button("OK", role: .cancel) {
+    reinitialiserPartie()
+  }
+}
+
+Poser une question
+L'alerte peut contenir autant de boutons que désiré. Si vous ne définissez aucun bouton avec le rôle .cancel, un bouton OK sera automatiquement ajouté.
+
+Lorsqu'une fenêtre popup est utilisée pour poser une question, il est important de montrer clairement à l'usager qu'il peut accepter (ex : bouton OK ou Oui) ou refuser (ex : bouton Annuler ou Non) ce qui lui est demandé.
+
+Notez que sur iOS, le bouton .cancel sera toujours situé à gauche, peu importe dans quel ordre vous avez placé les boutons.
+
+SwiftUI
+Button("Supprimer") {
+  afficherAlerte = true
+}
+.alert("Désirez-vous vraiment supprimer cet item?", isPresented: $afficherAlerte) {
+  Button("Oui") {
+    // code pour effectuer le traitement
+  }
+  Button("Non", role: .cancel) {
+  }
+}
+
+Alerte avec boutons oui et non
+
+Attention : la Structure Alert ne doit plus être utilisée. Elle est obsolète depuis iOS 13.0 et macOS 10.15.
+
+SwiftUI
+Button("Supprimer") {
+  afficherAlerte = true
+}
+.alert(isPresented: $afficherAlerte) {
+  Alert(title: Text("Bonjour!"))
+}
+
+Saisir de l'information
+Depuis iOS 16, la méthode .alert() permet de saisir de l'information, par exemple à l'aide d'un TextField.
+
+Il n'est pas possible de construire une vue complexe mais l'ajout de quelques TextFields est accepté.
+
+Si vous avez besoin d'un texte supplémentaire, vous pouvez utiliser la syntaxe avec un message.
+
+SwiftUI
+.alert("Partie terminée!", isPresented: $afficherAlerte) {
+  TextField("", text: $nom)
+  Button("Enregistrer") {
+    // code pour effectuer le traitement
+  }
+  Button("Ne pas enregistrer", role: .cancel) {
+  }
+}
+message: {
+  Text("Entrez votre nom.")
+}
+
+TextField dans .alert()
+
+Alerte attachée à autre chose qu'un bouton
+L'exemple classique consiste à utiliser .alert() avec un bouton comme dans les exemples plus haut.
+
+Mais sachez qu'une alerte peut également être utilisée avec autre chose, par exemple un VStack ou un NavigationStack.
+
+En fait, 
+
+SwiftUI
+VStack {
+
+  ...
+  Button(action: {
+    if ... {
+      message = "Réussi"
+    }
+    else {
+      message = "Raté"
+    }
+    afficherAlerte = true
+  }) {
+    Text("Tester")
+  }
+}
+.alert(message, isPresented: $afficherAlerte) {
+}
+
+Pour plus d'information
+« Alerts ». Apple developer. https://developer.apple.com/design/human-interface-guidelines/alerts
+
+« alert(_:isPresented:presenting:actions:message:) ». Apple. https://developer.apple.com/documentation/swiftui/view/alert(_:ispresented:presenting:actions:message:)-8584l
+
+« iOS 15 Alerts in SwiftUI ». YouTube - Stewart Lynch . https://www.youtube.com/watch?v=NC_c7WfSRTk
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 26 janvier 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+10.5
+Demander une confirmation avec .confirmationDialog()
+10.4
+Message popup avec .alert()
+10.3
+Color
+10.2
+Button
+10.1
+Text
+9.3
+Convertir une date en chaîne
+9.2
+Initialiser une date avec Swift
+9.1
+Comment Swift représente les dates
+8.7
+Trier un tableau
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Quelques vues SwiftUI
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+10.5 Demander une confirmation avec .confirmationDialog()
+La méthode confirmationDialog() permet d'afficher un popup au bas de l'écran pour permettre à l'usager d'accepter ou de refuser une proposition.
+
+Son fonctionnement ressemble à celui de alert() : une variable d'état contrôle s'il doit être affiché ou non et on peut définir quels boutons seront affichés et quelles actions ils déclencheront.
+
+Si aucun bouton avec le rôle .cancel n'est défini dans le confirmDialog(), un bouton Cancel sera automatiquement ajouté. Si l'appareil est configuré en français, on verra plutôt le libellé Annuler.
+
+L'ajout manuel d'un bouton d'annulation permet d'effectuer des tâches de nettoyage.
+
+Un clic en dehors du popup fera la même chose que si l'usager avait cliquésur le bouton d'annulation.
+
+SwiftUI
+// role: .destructive pour mettre en rouge
+Button(role: .destructive, action: {
+  afficherPopupConfirmationSuppression = true
+}) {
+  Image(systemName: "trash")
+    .padding(.trailing)
+}
+.confirmationDialog("Supprimer l'item \(nomItem)?", isPresented: $afficherPopupConfirmationSuppression, titleVisibility: .visible) {
+  Button("Supprimer", role: .destructive) {
+    ...   // appelle la fonction de suppression
+  }
+}
+
+confirmationDialog()
+
+Lorsqu'on a une vue List, il est parfois préférable d'attacher le .confirmationDialog() au List plutôt qu'au bouton qui est à l'intérieur de la liste.
+
+Ceci est le cas, notamment, si on obtient le message d'erreur  « The compiler is unable to type-check this expression in reasonable time ».
+
+SwiftUI
+List(items) { item in
+  ...
+  Button(role: .destructive, action: {
+    afficherPopupConfirmationSuppression = true
+    itemASupprimer = item   // pour que le code sache quel item supprimer
+  }) {
+    Image(systemName: "trash")
+  }
+}
+.confirmationDialog(itemASupprimer != nil ? "Supprimer l'item \(itemASupprimer!.titre)?" : "Supprimer l'item?", isPresented: $afficherPopupConfirmationSuppression, titleVisibility: .visible) {
+  Button("Supprimer", role: .destructive) {
+    if itemASupprimer != nil {
+      ...   // appelle la fonction de suppression
+      itemASupprimer = nil
+    }
+  }
+  Button("Annuler", role: .cancel) {
+    itemASupprimer = nil
+  }
+}
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 14 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+10.6
+Link
+10.7
+Ajouter une image dans un projet SwiftUI
+10.5
+Demander une confirmation avec .confirmationDialog()
+10.4
+Message popup avec .alert()
+10.3
+Color
+10.2
+Button
+10.1
+Text
+9.3
+Convertir une date en chaîne
+9.2
+Initialiser une date avec Swift
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Quelques vues SwiftUI
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+10.6 Link
+La structure Link permet d'afficher un lien.
+
+On doit préciser le texte du lien puis, dans la propriété destination, l'URL.
+
+Une des particularités de la structure URL, c'est que son constructeur, lorsqu'il reçoit en paramètre une chaîne qui représente l'URL, peut retourner nil (sa signature est init?(string: String)). Ceci oblige le développeur à vérifier si l'URL a bien été fourni, particulièrement lorsque les informations proviennent de variables.
+
+URL codé en dur
+Lorsque l'URL est codé en dur, nous savons qu'il a été fourni. Il est donc acceptable d'ajouter un point d'exclamation à la fin (implicitly unwrapped optional).
+
+SwiftUI
+Link("Source de l'image : Open Clipart",
+  destination: URL(string: "https://openclipart.org/detail/4074/small-funny-angry-monster")!
+)
+
+URL dans une variable
+Si l'URL provient d'une variable, par exemple s'il est saisi par l'usager ou s'il est tiré d'une base de données, il n'est pas sécuritaire d'utiliser le point d'exclamation. Si on le faisait et que l'URL était nil, on obtiendrait le message « Fatal error: Unexpectedly found nil while unwrapping an Optional value » lors de l'exécution de l'application.
+
+Il existe une technique plus sécuritaire pour effectuer ce travail : tester si la chaîne n'est pas à nil avant d'utiliser le point d'exclamation.
+
+SwiftUI
+if adresse != nil {
+  Link("Pour plus d'information", destination: URL(string: adresse)!)
+}
+
+Lien sur une image
+Plutôt que de fournir un texte sur lequel on cliquera, il est possible d'utiliser une image, un Label ou même un assemblage dans un contrôle d'empilement.
+
+SwiftUI
+Link(destination: URL(string: "https://apical.xyz")!) {
+  VStack {
+    Image("logo-apical")
+    Text("Apical")
+  }
+}
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 24 janvier 2023
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Précédent [Alt+P]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+10.8
+Label : la combinaison icône et texte
+10.7
+Ajouter une image dans un projet SwiftUI
+10.6
+Link
+10.5
+Demander une confirmation avec .confirmationDialog()
+10.4
+Message popup avec .alert()
+10.3
+Color
+10.2
+Button
+10.1
+Text
+9.3
+Convertir une date en chaîne
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Quelques vues SwiftUI
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+10.8 Label : la combinaison icône et texte
+Dans vos vues SwiftUI, il est facile d'intégrer une icône suivie d'un texte. Le contrôle Label est conçu exactement pour celà.
+
+Il est possible de travailler avec la bibliothèque d'icônes SF Symbols.
+
+SwiftUI
+Label("Ajouter", systemImage: "plus.circle")
+
+Label
+
+Il est également possible d'utiliser une image que vous avez ajoutée dans votre projet.
+
+SwiftUI
+Label("Profil", image: "user")
+
+Label
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 18 février 2021
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+10.12
+List
+10.11
+Les contrôles d'empilement (VStack, HStack, ZStack)
+10.10
+Les espaceurs (Spacer)
+10.9
+Les polices personnalisées
+10.8
+Label : la combinaison icône et texte
+10.7
+Ajouter une image dans un projet SwiftUI
+10.6
+Link
+10.5
+Demander une confirmation avec .confirmationDialog()
+10.4
+Message popup avec .alert()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Quelques vues SwiftUI
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+10.12 List
+Avec SwiftUI, la vue List permet d'afficher des informations l'une sous l'autre et, selon les option que vous mettez en place, d'y effectuer une sélection.
+
+Elle assure que l'écran pourra défiler si le contenu déborde en hauteur.
+
+Protocole Identifiable
+Bien que ce ne soit pas obligatoire, la liste est plus facile à créer à partir d'un tableau dont les éléments répondent au protocole Identifiable.
+
+Swift
+import SwiftUI
+
+struct Item: Identifiable {
+  var id: Int
+  var code: String
+  var titre: String
+  var couleur: Color
+}
+
+Au besoin, la structure pourra comprendre un identifiant autogénéré à l'aide de UUID().
+
+Swift
+struct Item: Identifiable {
+  var id: UUID = UUID()
+  var code: String
+  var titre: String
+  var couleur: Color
+}
+
+Il est désormais possible d'utiliser un tableau de Item dans une liste :
+
+SwiftUI
+struct ContentView: View {
+  private var items: [Item] = [
+    Item(code: "abc", titre: "Item 1", couleur: .blue),
+    Item(code: "def", titre: "Item 2", couleur: .red),
+    Item(code: "ghi", titre: "Item 3", couleur: .green),
+  ]
+
+  var body: some View {
+    List(items) {
+      Text($0.titre)
+    }
+  }
+}
+
+Si vous préférez travailler avec un nom de variable plutôt qu'avec $0 :
+
+SwiftUI
+List(items) { item in
+  Text(item.titre)
+}
+
+List simple
+
+On voit que par défaut, le fond de l'écran, derrière la liste, apparaît en gris. Cette apparence peut être changée à l'aide du modifieur scrollContentBackground().
+
+SwiftUI
+List(items) { item in
+  Text(item.titre)
+}
+.scrollContentBackground(.hidden)
+
+scrollContentBackground
+
+Si les éléments ne répondent pas au protocole Identifiable
+Dans le cas où les éléments de la liste ne répondent pas au protocole Identifiable, par exemple une liste de String, il faudra spécifier qu'est-ce qui identifie chaque élément de façon unique.
+
+Dans le cas le plus simple, on identifiera chaque élément à l'aide de .self. Ceci fonctionnera à condition que l'élément réponde au protocole Hashable. C'est le cas, par exemple, pour les entiers et les chaînes.
+
+SwiftUI
+struct ContentView: View {
+  private var donnees: [String] = ["a", "b", "c", "d", "e", "f", "g"]
+
+  var body: some View {
+    List(donnees, id: \.self) { donnee in
+      Text(donnee)
+    }
+  }
+}
+
+Dans le cas d'une structure, si chaque propriété est un entier ou une chaîne, il faudra simplement ajouter : Hashable à la déclaration de la structure.
+
+Voici un exemple avec un tableau d'items :
+
+SwiftUI
+// la structure se conforme au protocole Hashable sans rien lui ajouter de plus puisque toutes ses propriétés
+// se conforment également au protocole Hashable
+struct Jeu: Hashable {
+  var nom: String
+  var niveau: Int
+}
+
+SwiftUI
+struct ContentView: View {
+  private var jeux: [Jeu] = [
+    Jeu(nom: "Super Mario Bros.", niveau: 2),
+    Jeu(nom: "The Legend of Zelda", niveau: 3),
+    Jeu(nom: "Pac-Man", niveau: 2),
+    Jeu(nom: "Tetris", niveau: 1)
+  ]
+
+
+  var body: some View {
+    List(jeux, id: \.self) { jeu in
+      Text(jeu.nom)
+    }
+  }
+}
+
+Dans des cas plus complexes, vous pouvez indiquer clairement quelle propriété permettra d'identifier l'élément de façon unique.
+
+Par exemple, si on a une structure Etudiant qui contient une propriété code unique :
+
+SwiftUI
+struct Etudiant {
+  var code: String   // le code devra être unique dans le tableau d'étudiants
+  var prenom: String
+  var nom: String
+}
+
+SwiftUI
+struct ContentView: View {
+  private var etudiants: [Etudiant] = [...]
+
+  var body: some View {
+    List(etudiants, id: \.code) { etudiant in
+      Text(etudiant.prenom)
+    }
+  }
+}
+
+Affichage complexe
+Il est possible d'afficher l'information sous la forme qui vous convient.
+
+SwiftUI
+List(items) { item in
+  HStack {
+    Image(systemName: "paperclip")
+    Text(item.code)
+      .foregroundColor(item.couleur)
+    Text("-")
+    Text(item.titre)
+      .foregroundColor(item.couleur)
+  }
+}
+
+List
+
+Avec ForEach
+ForEach est une structure qui permet de générer des vues à partir d'une boucle.
+
+Elle est beaucoup moins puissante que List. Cependant, la combinaison des deux est très intéressante puisqu'elle nous donne plus de flexibilité pour la mise en forme.
+
+Voici un exemple de base :
+
+SwiftUI
+List {
+  ForEach(items) { item in
+    Text(item.titre)
+
+  }
+}
+
+List
+
+ 
+
+Voici un exemple qui permet d'afficher des sous-catégories :
+
+Swift
+List {
+  Section(header: Label("Catégorie 1", systemImage: "seal")) {
+    ForEach(itemsCategorie1) { item in
+      HStack {
+        Text(item.code)
+          .foregroundColor(item.couleur)
+        Text("-")
+        Text(item.titre)
+          .foregroundColor(item.couleur)
+      }
+    }
+  }
+
+  Section(header: Label("Catégorie 2", systemImage: "cone")) {
+    ForEach(itemsCategorie2) { item in
+      HStack {
+        Text(item.code)
+          .foregroundColor(item.couleur)
+        Text("-")
+        Text(item.titre)
+          .foregroundColor(item.couleur)
+      }
+    }
+  }
+}
+
+List avec Foreach
+
+Sélectionner un élément
+Avec onTapGesture, il est possible de déterminer quel élément est sélectionné.
+
+Remarquez que onTapGesture doit être placé à l'intérieur du List. On ne réagit pas à un doigt sur la liste mais bien à un doigt sur un élément de la liste.
+
+SwiftUI
+struct ContentView: View {
+  private var items: [Item] = [
+    Item(code: "abc", titre: "Item 1", couleur: .blue),
+    Item(code: "def", titre: "Item 2", couleur: .red),
+    Item(code: "ghi", titre: "Item 3", couleur: .green),
+  ]
+  @State private var selection: Item?
+
+  var body: some View {
+    VStack {
+      List(items) { item in
+        Text(item.titre)
+          .onTapGesture {
+            selection = item
+          }
+      }
+
+      if selection != nil {
+        Text(selection!.titre)
+      }
+      else {
+        Text("Aucune sélection")
+      }
+    }
+  }
+}
+
+Attention : si la liste contient des NavigationLink, il faudra plutôt utiliser la technique présentée sur la fiche « Action au toucher d'un NavigationLink en plus du changement de vue ».
+
+Sélectionner plusieurs éléments
+Pour permettre la sélection multiple, il faudra travailler avec un tableau pour retenir les éléments sélectionnés.
+
+SwiftUI
+struct ContentView: View {
+  private var items: [Item] = [
+    Item(code: "abc", titre: "Item 1", couleur: .blue),
+    Item(code: "def", titre: "Item 2", couleur: .red),
+    Item(code: "ghi", titre: "Item 3", couleur: .green),
+  ]
+  @State private var selections: [Item] = []
+
+  var body: some View {
+    VStack {
+      List(items){ item in
+        Text(item.titre)
+          .onTapGesture {
+            if selections.firstIndex(where: { $0.id == item.id }) == nil {
+              selections.append(item)
+            } else {
+              selections.removeAll(where: { $0.id == item.id })
+            }
+          }
+      }
+
+      if selections.count > 0 {
+        List(selections) { item in
+          Text(item.titre)
+        }
+      }
+      else {
+        Text("Aucune sélection")
+      }
+    }
+  }
+}
+
+Changer l'apparence de l'item sélectionné
+Pour que l'item sélectionné soit différent visuellement, il est possible d'utiliser listRowBackground.
+
+Notez que vous devrez utiliser ForEach pour que ceci fonctionne.
+
+De plus, dans que cet extrait de code, pour effectuer une égalité entre l'item sélectionné et l'item affiché, la structure devra répondre au protocole Equatable.
+
+Swift
+import Foundation
+import SwiftUI
+
+struct Item: Identifiable, Equatable {
+  var id: UUID = UUID()
+  var code: String
+  var titre: String
+  var couleur: Color
+}
+
+SwiftUI
+List {
+  ForEach(items) { item in
+    HStack {
+      Image(systemName: "paperclip")
+      Text(item.code)
+        .foregroundColor(item.couleur)
+      Text("-")
+      Text(item.titre)
+        .foregroundColor(item.couleur)
+    }
+    .listRowBackground(selection == item ?
+      Rectangle()
+        .foregroundColor(.gray)
+        .opacity(0.1)
+      : nil
+    )
+    .onTapGesture {
+      selection = item
+    }
+  }
+}
+
+List avec élément sélecitonné visible
+
+Pour plus d'information
+« SwiftUI - Dynamic List & Identifiable ». Medium. https://medium.com/flawless-app-stories/swiftui-dynamic-list-identifiable-73c56215f9ff
+
+« What is the difference between List and ForEach in SwiftUI? ». Stack Overflow. https://stackoverflow.com/questions/56535326/what-is-the-difference-between-list-and-foreach-in-swiftui
+
+« Why does \.self work for ForEach? ». Hacking with Swift. https://www.hackingwithswift.com/books/ios-swiftui/why-does-self-work-for-foreach
+
+« How to conform to the Hashable protocol ». Hacking with Swift. https://www.hackingwithswift.com/example-code/language/how-to-conform-to-the-hashable-protocol
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 11 février 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+10.13
+Grid et LazyVGrid
+10.12
+List
+10.11
+Les contrôles d'empilement (VStack, HStack, ZStack)
+10.10
+Les espaceurs (Spacer)
+10.9
+Les polices personnalisées
+10.8
+Label : la combinaison icône et texte
+10.7
+Ajouter une image dans un projet SwiftUI
+10.6
+Link
+10.5
+Demander une confirmation avec .confirmationDialog()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Quelques vues SwiftUI
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+10.13 Grid et LazyVGrid
+SwiftUI propose quelques vues qui permettent de placer des vues en lignes et en colonnes.
+
+Dans cette fiche :
+
+Grid
+LazyVGrid
+Grid
+La vue Grid permet de placer des vues en lignes et en colonnes.
+
+Le principe ressemble un peu à un tableau HTML : on définit des lignes avec GridRow (l'équivalent de <tr>) dans lesquelles on définit des vues (chaque vue est l'équivalent d'un <td>).
+
+SwiftUI
+Grid {
+  GridRow {
+    Text("Ligne 1, colonne 1")
+    Text("Ligne 1, colonne 2")
+  }
+  GridRow {
+    Text("Ligne 2, colonne 1")
+    Text("Ligne 2, colonne 2")
+  }
+}
+
+Voici un exemple qui montre ce qui se passe de façon plus graphique.
+
+SwiftUI
+Grid {
+  GridRow {
+    Text("Ligne 1, colonne 1")
+      .padding(20)
+      .background(Color.blue)
+    Text("Ligne 1, colonne 2")
+      .padding(20)
+      .background(Color.blue)
+  }
+  GridRow {
+    Text("Ligne 2, colonne 1")
+      .padding(20)
+      .background(Color.blue)
+    Text("Ligne 2, colonne 2")
+      .padding(20)
+      .background(Color.blue)
+  }
+}
+
+Grid
+
+Il est possible de spécifier certains paramètres pour mieux contrôler l'apparence du Grid.
+
+SwiftUI
+Grid(horizontalSpacing: 5, verticalSpacing: 25) {
+  ...
+}
+
+Grid
+
+LazyVGrid
+La vue LazyVGrid permet elle aussi de placer des vues en lignes et en colonnes.
+
+Sa particularité : elle est plus efficace pour gérer une grande quantité d'informations à afficher.
+
+De plus, elle permet de changer de ligne automatiquement quand les vues remplissent l'écran en largeur.
+
+SwiftUI
+LazyVGrid(columns: [
+  GridItem(.flexible()),
+  GridItem(.flexible())   // on aura deux colonnes
+], spacing: 25) {
+   ForEach(items) {item in
+      // vue qui affiche un item
+      // ...
+   }
+}
+
+Pour plus d'information
+« How to position views in a grid using LazyVGrid and LazyHGrid ». Hacking with Swift. https://www.hackingwithswift.com/quick-start/swiftui/how-to-position-views-in-a-grid-using-lazyvgrid-and-lazyhgrid
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 6 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]
+Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.1
+Form
+12.1
+.transition(.scale)
+11.9
+Modifieur .rotationEffect()
+11.8
+Modifieur .opacity()
+11.7
+Modifieur .disabled()
+11.6
+Modifieur .zIndex()
+11.5
+Modifieur .position()
+11.4
+Modifieur .offset()
+11.3
+Modifieur .padding()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+Les formulaires
+13.1 Form
+La structure Form permet de modifier l'apparence d'un formulaire.
+
+Il s'agit d'un conteneur spécialisé, basé sur List, qui applique automatiquement au formulaire un style prédéfini.
+
+Il est cependant tout à fait possible de définir un formulaire sans Form.
+
+Dans cette fiche :
+
+Form simple
+Ajuster l'espacement à l'intérieur du Form
+Limiter la hauteur du Form
+Placer plus d'un bouton dans une ligne du formulaire
+Form simple
+SwiftUI
+Form {
+  TextField("Nom", text: $nom)
+}
+
+TextField dans Form
+
+Ajuster l'espacement à l'intérieur du Form
+Le modifieur .contentMargins() permet d'ajuster la marge entre le contenu du Form et ses bordures.
+
+Dans cet exemple, le Form est placé dans un NavigationStack avec titre. Par défaut, l’espacement sous le titre est minimal.
+
+Form avec titre
+
+Avec le .contentMargins(), on a un plus grand contrôle sur l'espacement.
+
+SwiftUI
+NavigationStack {
+  Form {
+    TextField("Nom", text: $nom)
+  }
+  .contentMargins(.top, 20)
+  .navigationTitle("Mon application")
+}
+
+ContentMargins
+
+Limiter la hauteur du Form
+Par défaut, un Form s'étend pour occuper tout l'espace disponible à l'écran.
+
+Il est généralement recommandé de conserver ce comportement.
+
+Si vous devez absolument limiter sa hauteur, le modifieur .frame() permet d'ajuster la taille du Form.
+
+SwiftUI
+Form {
+  TextField("Nom", text: $nom)
+}
+.frame(maxHeight: 150)
+
+Le Form sera alors centré verticalement dans l’espace disponible. Au besoin, il est possible d’utiliser un VStack et un Spacer() pour le maintenir en haut de l’écran.
+
+Attention : en limitant la taille avec .frame(), le formulaire se transformera en zone de défilement si son contenu est plus grand que l'espace alloué. Ce comportement peut être déroutant pour l'usager.
+
+Placer plus d'un bouton dans une ligne du formulaire
+Puisque Form est basé sur List, il faut prendre une précaution particulière pour placer plus d'un bouton sur une même ligne du formulaire.
+
+Le problème, c'est que par défaut, dans une liste, SwiftUI étire la zone cliquable des boutons sur toute la largeur de l'écran. Un seul bouton par ligne est donc cliquable.
+
+Ce comportement est pratique : il permet de cliquer n'importe où sur la ligne pour réaliser l'action du bouton.
+
+Dans cet exemple, SwiftUI ne parvient pas à distinguer les zones de clic, ce qui rend le comportement imprévisible.
+
+SwiftUI
+Form {
+  HStack(spacing: 12) {
+    Button("Premier choix") {
+      choix = 1
+    }
+    .tint(choix == 1 ? .blue : .gray)
+
+    Button("Deuxième choix") {
+      choix = 2
+    }
+    .tint(choix == 2 ? .blue : .gray)
+  }
+}
+
+Il s'agit d'un problème connu dont la solution est facile à mettre en place, à condition de la connaître ;-)
+
+Il suffit de limiter la taille des boutons à l'aide d'un style prédéfini afin de permettre les clics sur chacun des boutons de la ligne.
+
+SwiftUI
+Form {
+  HStack(spacing: 12) {
+    Button("Premier choix") {
+      choix = 1
+    }
+    .buttonStyle(.borderless)
+    .tint(choix == 1 ? .blue : .gray)
+
+    Button("Deuxième choix") {
+      choix = 2
+    }
+    .buttonStyle(.borderless)
+    .tint(choix == 2 ? .blue : .gray)
+  }
+}
+
+Pour plus d'information
+« Creating Forms in SwiftUI ». SerialCoder.dev. https://serialcoder.dev/text-tutorials/swiftui/creating-forms-in-swiftui/
+
+ 
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 8 février 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.2
+TextField
+13.1
+Form
+12.1
+.transition(.scale)
+11.9
+Modifieur .rotationEffect()
+11.8
+Modifieur .opacity()
+11.7
+Modifieur .disabled()
+11.6
+Modifieur .zIndex()
+11.5
+Modifieur .position()
+11.4
+Modifieur .offset()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.2 TextField
+La vue TextField permet de saisir du texte.
+
+Dans cette fiche :
+
+Modifieur textFieldStyle()
+Bordure personnalisée
+Placer le TextField dans un Form
+Libellé
+Libellé flottant
+Alignement du texte
+Bouton pour traiter le formulaire
+Configurer le clavier
+Quelques autres modifieurs
+Réagir au changement
+Le premier paramètre de TextField permet de spécifier le libellé. Sous iOS, ce libellé sera inscrit dans la boîte de saisie, comme un filigrane (en anglais : watermark ou placeholder). Ce n'est que sous macOS qu'il est placé comme les libellés qu'on a l'habitude de voir dans un formulaire Web, c'est-à-dire à gauche de la case de saisie.
+
+Le second paramètre est le nom de la variable dans laquelle la valeur saisie sera stockée. Ce doit être une variable avec liaison (binding), donc précédée par un signe $, afin que la valeur entrée dans le TextField modifie cette variable et vice-versa. Ce peut être par exemple une variable déclarée avec l'attribut @State.
+
+SwiftUI
+struct ContentView: View {
+  @State private var nom: String = ""
+
+  var body: some View {
+    ...
+    TextField("Nom", text: $nom)
+    ...
+  }
+}
+
+TextField
+
+Modifieur textFieldStyle()
+Vous l'avez sans doute remarqué, par défaut, l'apparence n'est pas très intéressante.
+
+Le modifieur textFieldStyle() permet d'ajuster l'apparence du TextField.
+
+SwiftUI
+TextField("Nom", text: $nom)
+  .textFieldStyle(.roundedBorder)
+  .padding()
+
+J'ai ajouté un modifieur padding() afin que le TextField ne soit pas collé sur les bords de l'écran.
+
+TextFieldStyle
+
+Bordure personnalisée
+Plutôt qu'une bordure grise, il est possible de définir une bordure personnalisée selon nos besoins.
+
+La technique consiste à utiliser le modifieur overlay qui permet de définir une vue à placer par-dessus le TextField.
+
+SwiftUI
+TextField("Nom", text: $nom)
+  .padding(7)
+  .overlay {
+    RoundedRectangle(cornerRadius: 5)
+      .stroke(Color.accentColor, lineWidth: 2)
+  }
+  .padding()
+
+TextField avec overlay
+
+Placer le TextField dans un Form
+Bien que ceci ne soit pas obligatoire, il est possible de placer le TextField dans une structure Form afin d'améliorer le visuel.
+
+Remarquez que lorsqu'on utilise un Form, l'apparence est agréable même sans modifieur.
+
+SwiftUI
+Form {
+  TextField("Nom", text: $nom)
+}
+
+TextField dans Form
+
+Libellé
+Il faut toujours avoir un libellé autre que le filigrane.
+En effet, l'utilisation d'un filigrane comme seul libellé n'est pas ergonomique puisqu'une fois le formulaire rempli, on ne verra plus ce qui était attendu dans chacune des cases.
+
+Ceci serait problématique par exemple dans un formulaire qui doit saisir un prénom et un nom de famille. Devait-on entrer le nom de famille en premier ou le prénom?
+
+D'ailleurs, on voit dans les applications de Apple qu'il y a généralement autre chose que le filigrane pour identifier une case de saisie, tel qu'illustré dans cette vue dans les réglages.
+
+Libellés dans les réglages
+
+Afin de s'assurer que l'application soit ergonomique, il est possible de forcer l'affichage d'un libellé en utilisant des sections.
+
+Remarquez qu'ici, je n'ai rien spécifié comme filigrane. J'aurais pu utiliser un filigrane pour donner de l'information complémentaire sur ce qui est attendu, par exemple le format d'un numéro de téléphone ou encore le fait que l'information soit requise ou non.
+
+SwiftUI
+Form {
+  Section(header: Text("Nom")) {
+    TextField("", text: $nom)
+  }
+  Section(header: Text("Âge")) {
+    TextField("", text: $ageString)
+      .keyboardType(.numberPad)
+  }
+}
+
+Sections
+
+Autre technique : définir le libellé à l'aide d'un Text placé à gauche du TextField.
+
+SwiftUI
+Form {
+  HStack {
+    Text("Nom")
+    TextField("", text: $nom)
+  }
+
+  HStack {
+    Text("Âge")
+    TextField("", text: $ageString)
+      .keyboardType(.numberPad)
+  }
+}
+
+Libellés avec HStack
+
+Afin de reproduire l'apparence des réglages du iPhone, il suffit d'ajouter une largeur aux libellés et de préciser qu'ils doivent être alignés à gauche.
+
+SwiftUI
+let largeurLibelles = 60.0
+...
+
+Form {
+  HStack {
+    Text("Nom")
+      .frame(width: largeurLibelles, alignment: .leading)
+    TextField("", text: $nom)
+  }
+
+  HStack {
+    Text("Âge")
+      .frame(width: largeurLibelles, alignment: .leading)
+    TextField("", text: $ageString)
+      .keyboardType(.numberPad)
+  }
+}
+
+TextField avec largeur libellé uniforme
+
+Libellé flottant
+Pour une apparence plus sophistiquée, vous pouvez vous tourner vers des libellés flottants, c'est-à-dire que le libellé apparaît comme un filigrane au départ et qu'il se déplace en haut de la valeur saisie dès qu'on commence à entrer du texte.
+
+Contrairement à Google avec Material Design, Apple a choisi de ne pas fournir de vue qui permet de générer un libellé flottant. C'est que ce type d'utilisation est controversé bien que plusieurs arguments des détracteurs soient discutables.
+
+Si vous souhaitez utiliser des libellés flottants, vous devrez ajouter un peu de code à votre application.
+
+Vous pouvez par exemple baser votre travail sur ceci : https://github.com/kishanraja/FloatingLabelTextFieldSwiftUI
+
+ou sur ceci : https://levelup.gitconnected.com/swiftui-floating-label-text-field-af04c2eb1a2b
+
+Alignement du texte
+Il est possible de modifier l'alignement du filigrane, et par le fait même du texte qui sera entré dans le TextField.
+
+Ceci est réalisé à l'aide du modifieur multilineTextAlignment().
+
+SwiftUI
+Form {
+  TextField("Nom", text: $nom)
+    .multilineTextAlignment(.trailing)
+}
+
+Alignement à droite
+
+Bouton pour traiter le formulaire
+Voir la fiche « Bouton pour traiter le formulaire » .
+
+Configurer le clavier
+Voir la fiche « Configurer le clavier du téléphone ».
+
+Quelques autres modifieurs
+.autocorrectionDisabled()
+.multilineTextAlignment()
+.textInputAutocapitalization()
+Réagir au changement
+Il est possible de commander une action dès que l'usager tape du texte dans le TextField grâce à la méthode onChange().
+
+SwiftUI
+TextField("Code:", text: $code)
+  .onChange(of: code) { ancienneValeur, nouvelleValeur in
+    ...
+  }
+
+Pour plus d'information
+« TextField in SwiftUI ». Swift with Majid. https://swiftwithmajid.com/2020/02/26/textfield-in-swiftui/
+
+« TextField in SwiftUI ». Stefan Blos. https://stefanblos.com/posts/textfield-in-swiftui/
+
+« Custom TextField in SwiftUI ». The Happy Programmer. https://thehappyprogrammer.com/custom-textfield-in-swiftui
+
+« SwiftUI Form tutorial for beginners ». Programming with Swift. https://programmingwithswift.com/swiftui-form-beginners-guide/
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 27 janvier 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.3
+TextEditor
+13.2
+TextField
+13.1
+Form
+12.1
+.transition(.scale)
+11.9
+Modifieur .rotationEffect()
+11.8
+Modifieur .opacity()
+11.7
+Modifieur .disabled()
+11.6
+Modifieur .zIndex()
+11.5
+Modifieur .position()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.3 TextEditor
+La vue TextEditor permet de saisir un texte long sur plusieurs lignes.
+
+SwiftUI
+struct ContentView: View {
+  @State private var commentaire: String = ""
+
+  var body: some View {
+    VStack {
+      Text("Commentaire")
+      TextEditor(text: $commentaire)
+        .border(Color.gray, width: 1)
+    }
+  }
+}
+
+TextEditor TextEditor avec clavier
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 6 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.4
+Configurer le clavier du téléphone
+13.3
+TextEditor
+13.2
+TextField
+13.1
+Form
+12.1
+.transition(.scale)
+11.9
+Modifieur .rotationEffect()
+11.8
+Modifieur .opacity()
+11.7
+Modifieur .disabled()
+11.6
+Modifieur .zIndex()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.4 Configurer le clavier du téléphone
+Par défaut, dès que l'usager clique dans un TextField, un clavier apparaît au bas de l'écran.
+
+Sur le simulateur, pour obtenir ce comportement, vous devez aller dans le menu I/O / Keyboard et décocher l'option Connect Hardware Keyboard.
+
+Clavier
+
+Le modifieur .keyboardType() permet de spécifier le type de clavier à utiliser. Ceci permettra d'offrir à l'usager un clavier adapté au genre d'information qu'il doit entrer.
+
+Par exemple, lorsqu'on saisit un nombre, il serait judicieux d'afficher le clavier numérique.
+
+SwiftUI
+TextField("", text: $ageString)
+  .keyboardType(.numberPad)
+
+numberPad
+
+Il existe des claviers spécialisés pour différents besoins.
+
+Je vous présente un peu plus bas un aperçu des touches offertes par chacun.
+
+Icône pour changer la langue du clavier
+Au bas du clavier numérique, vous retrouverez souvent une icône de globe.
+
+Un clic sur cette icône permet de basculer entre deux langues configurées sur le téléphone ou dans le simulateur. S'il y a plus de deux langues, un clic prolongé permettra de sélectionner parmi ces langues.
+
+Les caractères présentés sur le clavier numérique seront différents selon la langue choisie.
+
+C'est l'usager qui détermine les langues disponibles et non le développeur.
+
+Pour ajouter une langue sur le téléphone ou dans le simulateur :
+
+Cliquez sur l'icône Réglages.
+Sélectionnez l'option Général / Langue et région.
+Cliquez sur Ajouter une langue puis sélectionnez la langue désirée.
+Choix localisation
+
+Aperçu des configurations de clavier disponibles
+.default
+C'est le clavier qui apparaît si vous ne spécifiez pas de type de clavier ou encore si vous spécifiez le style .default.
+
+Il est illustré ici avec les lettres majuscules, avec les lettres minuscules, avec les chiffres puis avec les caractères spéciaux.
+
+.default .default
+
+.default .default
+
+.numberPad
+Ce clavier a été pensé pour faciliter l'entrée de nombres.
+
+Fait à noter : les touches offrent des chiffres seulement, pas de point décimal ni de possibilité pour nombres négatifs.
+
+Si le téléphone est configuré pour travailler dans une langue dans laquelle les caractères numériques sont différents, le clavier affichera les caractères dans la langue configurée.
+
+Dans cet exemple, on voit que le clavier peut afficher des caractères arabes.
+
+.numberPad .numberPad
+
+.decimalPad
+Même chose que .numberPad sauf qu'il y a une touche pour ajouter un point décimal.
+
+.decimalPad
+
+.numbersAndPonctuation
+Des touches ont été ajoutées à celles des chiffres afin faciliter l'entrée de certains caractères.
+
+C'est le clavier à utiliser si vous avez besoin de permettre les nombres négatifs.
+
+.numbersAndPonctuation
+
+.phonePad
+Ce clavier est optimisé pour entrer des numéros de téléphone. Il est comme .numberPad sauf qu'une touche permet de basculer vers un clavier qui facilite l'entrée des caractères +, * et #.
+
+Dans le cas où votre application permettrait par exemple d'entrer un numéro qui serait composé par l'application, il y a même les touches wait et pause qui peuvent être utilisées.
+
+.phonePad .phonePad
+
+.namePhonePad
+Ce clavier a été pensé pour les fois où l'usager doit entrer soit du texte, soit un numéro.
+
+Quand il présente des lettres, le clavier est identique au clavier .default. C'est quand on clique sur la touche 123 pour passer en mode numérique qu'il est différent puisqu'il ne présente que des chiffres.
+
+.namePhonePad .namePhonePad
+
+.alphabet
+Comme .default sauf qu'il n'y a pas de touche pour les émoticones.
+
+.asciiCapable
+
+.asciiCapable
+Comme .alphabet sauf que si on clique sur l'icône de globe pour modifier la localisation, seules les langues dont les lettres sont représentés par des caractères de la charte ASCII de base seront disponibles.
+
+.asciiCapable
+
+.asciiCapableNumberPad
+Même chose que .numberPad sauf que les chiffres sont toujours représentés par des caractères de la charte ASCII de base.
+
+Même si plusieurs langues sont configurées sur le téléphone, il n'y a pas d'icône de globe qui permet de changer de langue, par exemple pour afficher des chiffres arabes.
+
+.asciiCapableNumberPad
+
+.twitter
+Comme .default sauf qu'on a ajouté des touches pour faciliter l'entrée du @ et du #.
+
+.twitter
+
+.URL
+Comme .default sauf qu'on a ajouté des touches pour faciliter l'entrée de la barre oblique et des caractères « .com ».
+
+.twitter
+
+.emailAddress
+Comme .default sauf qu'il y a une touche pour faciliter l'entrée du @ et du point.
+
+.emailAddress
+
+.webSearch
+Comme .default sauf qu'il y a une touche pour faciliter l'entrée du point.
+
+.webSearch
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 3 décembre 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.5
+Saisir un nombre
+13.4
+Configurer le clavier du téléphone
+13.3
+TextEditor
+13.2
+TextField
+13.1
+Form
+12.1
+.transition(.scale)
+11.9
+Modifieur .rotationEffect()
+11.8
+Modifieur .opacity()
+11.7
+Modifieur .disabled()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.5 Saisir un nombre
+Pour saisir un nombre dans une application SwiftUI, il est possible d'utiliser un TextField auquel on appliquera un format .number ou encore un NumberFormatter.
+
+Ceci fera en sorte que dès que le TextField perd le focus, la valeur qui y est entrée sera validée afin qu'elle ne contienne que des chiffres avec possibilité d'un séparateur de décimales et de milliers selon la configuration.
+
+Si des caractères non numériques y sont entrés, le résultat sera ajusté afin de respecter le format attendu. Dans certains cas, les caractères non numériques seront supprimés pour ne conserver que les caractères numériques au début du texte. Dans d'autres cas la variable associée au TextField conservera la valeur qu'elle avait avant la saisie.
+
+Afin de rendre l'expérience utilisateur plus agréable, on prendra soin d'afficher le pavé numérique.
+
+Il faut cependant savoir que la pavé numérique n'est pas une assurance que l'usager entrera seulement des chiffres puisqu'il peut toujours faire un copier-coller d'une valeur non numérique.
+
+Voici un exemple de saisie d'un nombre entier avec un paramètre format.
+
+SwiftUI
+struct ContentView: View {
+  @State private var valeur: Int = 0
+
+
+  var body: some View {
+    VStack(alignment: .leading) {
+      Text("Entrez un nombre :")
+      TextField("", value: $valeur, format: .number)
+        .keyboardType(.numberPad)
+      ...
+    }
+  }
+}
+
+Et voici le même exemple avec un paramètre formatter.
+
+SwiftUI
+struct ContentView: View {
+  @State private var valeur: Int = 0
+
+
+  var body: some View {
+    VStack(alignment: .leading) {
+      Text("Entrez un nombre :")
+      TextField("", value: $valeur, formatter: NumberFormatter())
+        .keyboardType(.numberPad)
+      ...
+    }
+  }
+}
+
+Remarquez que les paramètres nommés du TextField sont différents de ceux utilisés lorsqu'il n'y a pas de format ou de formatter.
+
+SwiftUI
+TextField("", text: $prenom)
+
+Saisie d'un nombre avec décimales
+Il est facile de permettre une saisie avec décimales.
+
+Lorsqu'on utilise un paramètre format: .number, il suffit d'associer le TextField à une variable de type Double.
+
+SwiftUI
+struct ContentView: View {
+  @State private var valeur: Double = 0.0
+
+
+  var body: some View {
+    VStack {
+      Text("Entrez un nombre :")
+      TextField("", value: $valeur, format: .number)
+        .keyboardType(.decimalPad)
+      ...
+    }
+  }
+}
+
+Remarquez l'utilisation du clavier decimalPad. La nuance entre les deux est subtile mais elle est importante.
+
+numberPad	decimalPad
+.keyboardType(.numberPad)
+
+.keyboardType(.decimalPad)
+
+Si vous préférez utiliser un NumberFormatter, il faudra instancier un objet afin de lui préciser le format attendu.
+
+SwiftUI
+let numberFormatter: NumberFormatter = {
+  let formatter = NumberFormatter()
+  formatter.numberStyle = .decimal
+  return formatter
+}()
+
+struct ContentView: View {
+  @State private var valeur: Double = 0.0
+
+
+  var body: some View {
+    VStack {
+      Text("Entrez un nombre :")
+      TextField("", value: $valeur, formatter: numberFormatter)
+        .keyboardType(.decimalPad)
+      ...
+  }
+}
+
+Par défaut, le séparateur de décimales dépendra des configurations du iPhone.
+
+Il est possible de forcer l'utilisation d'une virgule pour séparer les décimales. Mais attention : le caractère spécifié pourrait ne pas être disponible sur le pavé numérique.
+
+SwiftUI
+let numberFormatter: NumberFormatter = {
+  let formatter = NumberFormatter()
+  formatter.numberStyle = .decimal
+  formatter.decimalSeparator = ","
+  return formatter
+}()
+
+Autres formats de nombres
+Il est même possible de pousser l'audace jusqu'à exiger que le nombre soit entré en toutes lettres! La valeur numérique qui correspond au texte entré sera stocké dans la variable.
+
+Par exemple, si l'usager entre neuf, la variable prendra la valeur 9.
+
+SwiftUI
+let numberFormatter: NumberFormatter = {
+  let formatter = NumberFormatter()
+  formatter.locale = Locale(identifier: "fr_CA")
+  formatter.numberStyle = .spellOut
+  return formatter
+}()
+
+
+struct ContentView: View {
+  @State private var valeur: Int = 0
+
+
+  var body: some View {
+    VStack {
+      Text("Entrez un nombre en toutes lettres :")
+      TextField("", value: $valeur, formatter: numberFormatter)
+
+      ...
+    }
+  }
+}
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 18 juin 2024
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.6
+Limiter le nombre de caractères dans un TextField
+13.5
+Saisir un nombre
+13.4
+Configurer le clavier du téléphone
+13.3
+TextEditor
+13.2
+TextField
+13.1
+Form
+12.1
+.transition(.scale)
+11.9
+Modifieur .rotationEffect()
+11.8
+Modifieur .opacity()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.6 Limiter le nombre de caractères dans un TextField
+Je vous partage une petite astuce qui permet de limiter le nombre de caractères entrés dans un TextField avec SwiftUI.
+
+La technique consiste à utiliser la méthode onChange() afin d'ajuster la variable si elle contient plus de caractères que désiré.
+
+Il faudra passer le paramètre par référence pour que la fonction puisse modifier la valeur de ce paramètre.
+
+SwiftUI
+var body: some View {
+  ...
+  TextField("Code:", text: $code)
+    .onChange(of: code) { ancienneValeur, nouvelleValeur in
+      let texteBonneTaille = limiterLongueur(texte: code, longueur: 5)
+      if (code != texteBonneTaille) {
+        code = texteBonneTaille
+       }
+    }
+  ...
+}
+
+ 
+
+/**
+  Retourne la chaîne limitée à un certain nombre de caractères.
+
+ - Parameters:
+   - texte: Chaîne de caractères originale
+   - longueur: Nombre de caractères maximal
+*/
+func limiterLongueur(texte: String, longueur: Int) {
+  var retour = texte
+  if texte.count > longueur {
+    retour = String(texte.prefix(longueur))
+  }
+  return retour
+}
+
+ 
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 27 janvier 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.7
+Picker
+13.6
+Limiter le nombre de caractères dans un TextField
+13.5
+Saisir un nombre
+13.4
+Configurer le clavier du téléphone
+13.3
+TextEditor
+13.2
+TextField
+13.1
+Form
+12.1
+.transition(.scale)
+11.9
+Modifieur .rotationEffect()
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.7 Picker
+Dans cette fiche :
+
+Picker
+Picker avec un tableau de String
+Picker avec instances d'une structure ou d'une classe
+Picker avec une énumération
+Utilisation d'une valeur optionnelle
+Picker dans un menu
+Picker
+La structure Picker permet de lister des options et d'identifier celle qui est présentement sélectionnée.
+
+Le Picker pourra être utilisé dans différents contextes, par exemple un formulaire ou un menu.
+
+Les options d'un Picker sont mutuellement exclusives, comme c'est le cas avec des boutons radio.
+
+Picker avec un tableau de String
+Quand on travaille avec un tableau de String, le Picker retiendra directement la chaîne sélectionnée.
+
+Il faut déclarer une variable d'état pour retenir cette valeur.
+
+SwiftUI
+struct ContentView: View {
+  let options: [String] = [
+    "Option 1",
+    "Option 2",
+    "Option 3"
+  ]
+
+
+  @State private var optionChoisie: String   // On aurait pu l'initialiser directement à "Option 1".
+                                             // Le code est plus intéressanat si on l'initialise à la première valeur du tableau.
+                                             // Comme il est trop tôt pour référer au tableau ici,
+                                             // il faut passer par le constructeur.
+
+  init() {
+    optionChoisie = options[0]
+  }
+
+  var body: some View {
+    VStack {
+      Picker("Choisissez une option", selection: $optionChoisie) {
+        ForEach(options, id: \.self) { option in
+          Text(option)
+        }
+      }
+
+      Text("Vous avez choisi :")
+      Text(optionChoisie)
+    }
+    .padding()
+  }
+}
+
+Picker Picker
+
+Picker avec instances d'une structure ou d'une classe
+Il est possible de travailler avec un tableau dont chaque élément est une instance d'une structure ou d'une classe qui répond au protocole Identifiable.
+
+Swift
+struct Option: Identifiable {
+    var id: Int = 0
+    var texte: String = ""
+    var icone: String = ""
+}
+
+À ce moment, le Picker retiendra l'identifiant de l'option sélectionnée.
+
+SwiftUI
+Struct ContentView: View {
+    let options: [Option] = [
+        Option(id: 1, texte: "Option 1", icone: "1.square.fill"),
+        Option(id: 2, texte: "Option 2", icone: "2.square.fill"),
+        Option(id: 3, texte: "Option 3", icone: "3.square.fill")
+    ]
+
+    @State private var idOptionChoisie: Int = 1
+
+    var body: some View {
+        VStack {
+            Picker("Choisissez une option", selection: $idOptionChoisie) {
+                ForEach(options) { option in
+                    Label(option.texte, systemImage: option.icone)
+                }
+            }
+            Text("Vous avez choisi :")
+            if let option = options.first(where: { $0.id == idOptionChoisie }) {
+              Text(option.texte)
+            }
+            else {
+              Text("Option invalide")
+            }
+        }
+    }
+}
+
+Picker Picker
+
+Picker avec une énumération
+Voyons maintenant comment travailler avec une énumération.
+
+L'énumération doit répondre au protocole CaseIterable.
+
+SwiftUI
+enum Option: String, CaseIterable {
+  case option1 = "Option 1"
+  case option2 = "Option 2"
+  case option3 = "Option 3"
+}
+
+Cette fois, le Picker retiendra une référence au cas sélectionné dans l'énumération.
+
+SwiftUI
+struct ContentView: View {
+  @State private var optionChoisie: Option = .option1
+
+  var body: some View {
+    VStack {
+      Picker("Choisissez une option", selection: $optionChoisie) {
+        ForEach(Option.allCases, id: \.self) { option in
+          Text(option.rawValue)
+        }
+      }
+
+      Text("Vous avez choisi :")
+      Text(optionChoisie.rawValue)
+    }
+    .padding()
+  }
+}
+
+Utilisation d'une valeur optionnelle
+Si le picker est associé à une variable qui peut prendre la valeur nil et que vous ne prenez pas les précautions nécessaires, vous obtiendrez le message « Picker: the selection "nil" is invalid and does not have an associated tag, this will give undefined results. ».
+
+Pour régler ce problème, il faut utiliser .tag() pour préciser :
+
+la valeur de l'option, soit celle qui sera assignée à la variable du Picker qui recueille l'option choisie (ici : valeurChoisie)
+le type de l'option, qui doit correspondre au type de la variable qui recueille l'option choisie.
+SwiftUI
+struct ContentView: View {
+  let valeurs = ["A", "B", "C"]
+  @State private var valeurChoisie: String?
+
+  var body: some View {
+    ...
+    Picker("", selection: $valeurChoisie) {
+      ForEach(valeurs, id: \.self) { valeur in
+        Text(valeur).tag(valeur as String?)
+      }
+    }
+  }
+}
+
+Si vous désirez permettre la sélection de la valeur nil, il faut procéder comme suit :
+
+SwiftUI
+struct ContentView: View {
+  let valeurs = ["A", "B", "C"]
+  @State private var valeurChoisie: String?
+
+  var body: some View {
+    ...
+    Picker("", selection: $valeurChoisie) {
+      Text("Aucune valeur").tag(nil as String?)
+      ForEach(valeurs, id: \.self) { valeur in
+        Text(valeur).tag(valeur as String?)
+      }
+    }
+  }
+}
+
+Picker dans un menu
+Si vous désirez créer un menu avec un crochet devant l'option sélectionnée, vous pouvez placer un picker dans le menu. Les détails sont ici.
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 7 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.8
+Toggle
+13.7
+Picker
+13.6
+Limiter le nombre de caractères dans un TextField
+13.5
+Saisir un nombre
+13.4
+Configurer le clavier du téléphone
+13.3
+TextEditor
+13.2
+TextField
+13.1
+Form
+12.1
+.transition(.scale)
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.8 Toggle
+La vue Toggle permet, dans un formulaire SwiftUI, de saisir un état binaire (vrai/faux, ouvert/fermé, actif/inactif).
+
+Elle prend l'apparence d'un bouton à bascule au fond vert ou gris selon que la valeur qu'elle représente est vraie ou fausse.
+
+Toggle activé Toggle désactivé
+
+SwiftUI
+struct ContentView: View {
+  @State private var actif: Bool = false
+
+  var body: some View {
+    Toggle(isOn: $actif) {
+      Text("Actif")
+    }
+    .padding()
+
+  }
+
+}
+
+Toggle
+
+Pour plus d'information
+« How to Use Toggle in SwiftUI ». Waldo. https://www.waldo.com/blog/swiftui-toggle
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 6 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.9
+Stepper
+13.8
+Toggle
+13.7
+Picker
+13.6
+Limiter le nombre de caractères dans un TextField
+13.5
+Saisir un nombre
+13.4
+Configurer le clavier du téléphone
+13.3
+TextEditor
+13.2
+TextField
+13.1
+Form
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.9 Stepper
+Un Stepper permet de saisir un nombre en cliquant sur + ou - jusqu'à la valeur désirée.
+
+SwiftUI
+struct ContentView: View {
+  @State private var quantite: Int = 0
+
+  var body: some View {
+    Stepper {
+      Text("Quantité: \(quantite)")
+    } onIncrement: {
+      quantite += 1
+    } onDecrement: {
+      quantite -= 1
+    }
+    .padding()
+
+  }
+}
+
+Stepper
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 6 mai 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.10
+Slider
+13.9
+Stepper
+13.8
+Toggle
+13.7
+Picker
+13.6
+Limiter le nombre de caractères dans un TextField
+13.5
+Saisir un nombre
+13.4
+Configurer le clavier du téléphone
+13.3
+TextEditor
+13.2
+TextField
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.10 Slider
+Un Slider (en français: glissière) permet de sélectionner une valeur en faisant glisser un curseur sur une échelle.
+
+SwiftUI
+struct ContentView: View {
+  @State private var valeur: Double = 0
+
+  var body: some View {
+    VStack {
+      Slider(value: $valeur, in: 0...10, step: 1.5)
+        .padding()
+      Text("Valeur choisie : \(valeur, specifier: "%.1f")")
+    }
+  }
+}
+
+Slider
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 18 juin 2024
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.11
+Bouton pour traiter le formulaire
+13.10
+Slider
+13.9
+Stepper
+13.8
+Toggle
+13.7
+Picker
+13.6
+Limiter le nombre de caractères dans un TextField
+13.5
+Saisir un nombre
+13.4
+Configurer le clavier du téléphone
+13.3
+TextEditor
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.11 Bouton pour traiter le formulaire
+Il n'est pas toujours requis d'ajouter un bouton pour traiter les données saisies dans un formulaire SwiftUI.
+
+Les informations pourraient être traitées à différents moments, par exemple :
+
+Au fur et à mesure que les informations sont modifiées (ex : .onChange());
+Lorsque l'usager clique sur le bouton de retour dans une vue affichée via NavigationLink;
+Sur-le-champ, lorsqu'il s'agit de valeurs tirées de la base de données à l'aide de SwiftData.
+Si vous souhaitez tout de même ajouter un bouton à un formulaire, sachez qu'il n'est pas requis que le bouton soit placé à l'intérieur du Form. Il n'est d'ailleurs pas nécessaire d'utiliser un Form.
+
+Voici quelques exemples de boutons situés au bas d'une série de TextField, avec et sans Form.
+
+Dans ce premier exemple, remarquez l'ajout d'un VStack qui entoure le dernier TextField et le bouton. Ce VStack assure qu'il n'y aura pas de ligne grise juste avant le bouton puisqu'il n'y a une ligne grise qu'entre les enfants directs du Form.
+
+SwiftUI
+Form {
+  HStack {
+    Text("Prénom")
+      .frame(width: largeurLibelles, alignment: .leading)
+    TextField("", text: $prenom)
+  }
+
+  // VStack pour éviter une ligne grise entre le dernier TextField et le bouton
+  VStack {
+    HStack {
+      Text("Nom de famille")
+        .frame(width: largeurLibelles, alignment: .leading)
+      TextField("", text: $nomFamille)
+    }
+
+    Button(action: {
+      // traitement ici
+    }) {
+      Text("Enregistrer")
+        .frame(maxWidth: .infinity)
+    }
+    .buttonStyle(.borderedProminent)
+  }
+}
+
+Bouton
+
+ Ici, on utilise l'approche avec des sections pour les libellés.
+
+SwiftUI
+Form {
+  Section(header: Text("Prénom")) {
+    TextField("", text: $prenom)
+  }
+  .listSectionSpacing(8)
+
+
+  Section(header: Text("Nom de famille")) {
+    TextField("", text: $nomFamille)
+  }
+
+  Button(action: {
+    // traitement ici
+  }) {
+    Text("Enregistrer")
+      .frame(maxWidth: .infinity)   // sans ceci, le texte du bouton serait aligné à gauche
+  }
+}
+
+Bouton
+
+Voici un exemple sans Form.
+
+SwiftUI
+VStack(alignment: .leading) {
+  Text("Prénom")
+  TextField("", text: $prenom)
+    .textFieldStyle(.roundedBorder)
+    .padding(.bottom, 20)
+
+  Text("Nom de famille")
+  TextField("", text: $nomFamille)
+    .textFieldStyle(.roundedBorder)
+    .padding(.bottom, 20)
+
+  Button(action: {
+    // traitement ici
+  }) {
+    Text("Enregistrer")
+      .frame(maxWidth: .infinity)
+  }
+  .buttonStyle(.bordered)
+}
+.padding()
+Spacer()
+
+Bouton
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 26 janvier 2026
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]Accueil Favoris Rapetisser le texte Grossir le texte Recherche Authentification
+Apical, ma plateforme d'apprentissage
+Formations (actuel)
+Questionnaires/
+Évaluations 
+Outils 
+Mon profil
+Aide 
+Mes favoris
+Format JSON dans un modèle
+
+Changer l'ordre Supprimer ce favori
+Formations
+
+Changer l'ordre Supprimer ce favori
+Mon historique
+13.12
+Modifieur .disabled()
+13.11
+Bouton pour traiter le formulaire
+13.10
+Slider
+13.9
+Stepper
+13.8
+Toggle
+13.7
+Picker
+13.6
+Limiter le nombre de caractères dans un TextField
+13.5
+Saisir un nombre
+13.4
+Configurer le clavier du téléphone
+ 
+Formation 420-4D4-VI : Applications mobiles 1 (SwiftUI), H-2026 ♦ Les formulaires
+Premier PrécédentSuivant Dernier
+
+PrécédentSuivant
+13.12 Modifieur .disabled()
+Le modifieur disabled() permet de rendre une vue inactive selon la condition précisée en paramètre.
+
+Ceci est pratique, par exemple, pour empêcher la modification d'un TextField.
+
+SwiftUI
+TextField("Code:", $code)
+  .disabled(uneVariable == uneValeur)
+
+Il permet également de désactiver un bouton.
+
+SwiftUI
+Button("Cliquez ici", action: {
+  // traitement ici
+})
+.disabled(nom.isEmpty)
+
+▼Publicité
+
+Par Christiane Lagacé
+Dernière révision le 1 avril 2025
+Précédent Suivant
+Ajouter une note personnelle ou un commentaire
+Note personnelle
+Commentaire public
+Commentaire pour le personnel enseignant
+© 2026 Tous droits réservés.
+Conception et développement de la plateforme : Christiane Lagacé
+Suivant [Alt+N]
