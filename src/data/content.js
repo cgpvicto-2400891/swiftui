@@ -468,6 +468,23 @@ TextField("E-mail", text: $email)
             },
             {
                 type: "heading",
+                content: "Lier un Nombre (Int/Double)"
+            },
+            {
+                type: "text",
+                content: "Pour lier directement une variable numérique (Int ou Double) à un TextField, utilisez le paramètre `value` et `format`."
+            },
+            {
+                type: "code",
+                title: "TextField avec Int",
+                language: "swift",
+                code: `@State private var quantity: Int = 1
+
+TextField("Quantité", value: $quantity, format: .number)
+    .keyboardType(.numberPad)`
+            },
+            {
+                type: "heading",
                 content: "Toggle (Interrupteur)"
             },
             {
