@@ -471,6 +471,10 @@ TextField("E-mail", text: $email)
                 content: "Lier un Nombre (Int/Double)"
             },
             {
+                type: "note",
+                content: "Nouveau : Voici comment gérer les nombres dans les champs de texte."
+            },
+            {
                 type: "text",
                 content: "Pour lier directement une variable numérique (Int ou Double) à un TextField, utilisez le paramètre `value` et `format`."
             },
