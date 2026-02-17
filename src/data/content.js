@@ -1593,7 +1593,7 @@ extension MaVue {
     },
     "lists-selection-fr": {
         title: "Listes & Sélection",
-        description: "Maîtrisez les listes SwiftUI : sélection, sections, styles et données complexes.",
+        description: "Maîtrisez les listes SwiftUI : sélection, sections, styles et données complexes. ",
         sections: [
             {
                 type: "heading",
@@ -1601,7 +1601,7 @@ extension MaVue {
             },
             {
                 type: "text",
-                content: "Pour afficher une liste d'objets personnalisés, il est recommandé qu'ils adoptent le protocole `Identifiable`. Cela garantit que chaque ligne est unique."
+                content: "Pour afficher une liste d'objets personnalisés, il est recommandé qu'ils adoptent le protocole `Identifiable`. Cela garantit que chaque ligne est unique. pour plus de detaille vous-pouvez consulter  https://apical.xyz/fiches/les_listes_002/list"
             },
             {
                 type: "code",

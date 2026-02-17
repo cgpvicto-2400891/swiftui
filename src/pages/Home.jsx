@@ -41,6 +41,21 @@ const Home = () => {
                     <p>Apprenez une fois, appliquez partout sur les plateformes Apple.</p>
                 </div>
             </section>
+             <section className='hero'>
+             <p className="hero-subtitle">
+                   <h3 className='text-gradient' >Attention</h3>
+                   ce site ne replace pas Apical. Les exemples sont partiellement générés par l’IA. Si vous souhaitez consulter la source complète, vous devez vous référer au site original. <a href="https://apical.xyz/formations"> <b>apical</b> </a>
+                </p>
+                <br />
+                <hr />
+                <br />
+                <p className='hero-subtitle'>Développé avec passion ☕ et beaucoup de café.
+                    Par un étudiant de 2e année en Techniques de l’informatique — Cégep de Victoriaville.
+                </p>
+                <a className='text-gradient' href="https://www.linkedin.com/in/ahmed-ali-elamri-58612633a/">linkedin</a>  
+
+
+             </section>
         </div>
     );
 };
