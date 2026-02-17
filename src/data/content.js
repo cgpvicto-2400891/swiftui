@@ -1844,5 +1844,92 @@ List(items) { item in
                 content: "Vous pouvez inspecter ce fichier pour débugger, mais évitez de le modifier manuellement."
             }
         ]
+    },
+    "form-fr": {
+        title: "Formulaires (Form)",
+        sections: [
+            {
+                type: "text",
+                content: "Le composant `Form` est optimisé pour afficher des contrôles de saisie de données regroupés, comme dans l'application Réglages."
+            },
+            {
+                type: "code",
+                title: "Structure de base",
+                language: "swift",
+                code: `Form {
+    Section(header: Text("Informations")) {
+        TextField("Nom", text: $name)
+        Toggle("Notifications", isOn: $notifications)
+    }
+    
+    Section(header: Text("Actions")) {
+        Button("Enregistrer") {
+            // Action
+        }
+    }
+}`
+            },
+            {
+                type: "heading",
+                content: "Sections"
+            },
+            {
+                type: "text",
+                content: "Utilisez `Section` pour grouper visuellement les champs. Vous pouvez ajouter un en-tête (header) et un pied de page (footer)."
+            }
+        ]
+    },
+    "string-methods-fr": {
+        title: "Méthodes de String",
+        sections: [
+            {
+                type: "text",
+                content: "Swift propose de nombreuses méthodes puissantes pour manipuler les chaînes de caractères."
+            },
+            {
+                type: "heading",
+                content: "Propriétés de base"
+            },
+            {
+                type: "code",
+                title: "Compter et Vérifier",
+                language: "swift",
+                code: `let message = "Bonjour"
+print(message.count) // 7
+print(message.isEmpty) // false`
+            },
+            {
+                type: "heading",
+                content: "Transformation"
+            },
+            {
+                type: "code",
+                title: "Majuscules / Minuscules",
+                language: "swift",
+                code: `let text = "SwiftUI"
+print(text.uppercased()) // "SWIFTUI"
+print(text.lowercased()) // "swiftui"`
+            },
+            {
+                type: "heading",
+                content: "Recherche et Remplacement"
+            },
+            {
+                type: "code",
+                title: "Contient, Préfixe, Suffixe",
+                language: "swift",
+                code: `let fileName = "image.png"
+print(fileName.hasSuffix(".png")) // true
+print(fileName.contains(".")) // true`
+            },
+            {
+                type: "code",
+                title: "Remplacer",
+                language: "swift",
+                code: `let greeting = "Bonjour Monde"
+let newGreeting = greeting.replacingOccurrences(of: "Monde", with: "Swift")
+print(newGreeting) // "Bonjour Swift"`
+            }
+        ]
     }
 };

@@ -60,7 +60,9 @@ export const syllabus = [
             { id: 'functions-fr', title: "Fonctions & Conversion", path: "/swift-fr/functions-fr" },
             { id: 'lists-selection-fr', title: "Listes & Sélection", path: "/swift-fr/lists-selection-fr" },
             { id: 'appstorage-fr', title: "Préférences (@AppStorage)", path: "/swift-fr/appstorage-fr" },
-            { id: 'reusable-views-fr', title: "Vues Réutilisables", path: "/swift-fr/reusable-views-fr" }
+            { id: 'reusable-views-fr', title: "Vues Réutilisables", path: "/swift-fr/reusable-views-fr" },
+            { id: "form-fr", title: "Formulaires (Form)", path: "/swift-fr/form-fr" },
+            { id: "string-methods-fr", title: "Méthodes de String", path: "/swift-fr/string-methods-fr" }
         ]
     }
 ];
