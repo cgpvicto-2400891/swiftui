@@ -62,7 +62,8 @@ export const syllabus = [
             { id: 'appstorage-fr', title: "Préférences (@AppStorage)", path: "/swift-fr/appstorage-fr" },
             { id: 'reusable-views-fr', title: "Vues Réutilisables", path: "/swift-fr/reusable-views-fr" },
             { id: "form-fr", title: "Formulaires (Form)", path: "/swift-fr/form-fr" },
-            { id: "string-methods-fr", title: "Méthodes de String", path: "/swift-fr/string-methods-fr" }
+            { id: "string-methods-fr", title: "Méthodes de String", path: "/swift-fr/string-methods-fr" },
+            { id: "casting-fr", title: "Conversion de Types (Casting)", path: "/swift-fr/casting-fr" }
         ]
     }
 ];

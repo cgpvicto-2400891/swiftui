@@ -1876,6 +1876,128 @@ List(items) { item in
             {
                 type: "text",
                 content: "Utilisez `Section` pour grouper visuellement les champs. Vous pouvez ajouter un en-tête (header) et un pied de page (footer)."
+            },
+            {
+                type: "heading",
+                content: "Exemple Complet : Profil Utilisateur"
+            },
+            {
+                type: "code",
+                title: "Formulaire de Profil",
+                language: "swift",
+                code: `struct ProfileFormView: View {
+    @State private var firstName = ""
+    @State private var lastName = ""
+    @State private var birthDate = Date()
+    @State private var shouldSendNewsletter = false
+    @State private var numberOfChildren = 0
+    @State private var favoriteColor = Color.blue
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section(header: Text("Informations Personnelles")) {
+                    TextField("Prénom", text: $firstName)
+                    TextField("Nom", text: $lastName)
+                    DatePicker("Date de naissance", selection: $birthDate, displayedComponents: .date)
+                }
+                
+                Section(header: Text("Préférences")) {
+                    Toggle("Recevoir la newsletter", isOn: $shouldSendNewsletter)
+                    Stepper("Nombre d'enfants : \(numberOfChildren)", value: $numberOfChildren, in: 0...10)
+                    ColorPicker("Couleur préférée", selection: $favoriteColor)
+                }
+                
+                Section {
+                    Button("Sauvegarder") {
+                        print("Profil sauvegardé !")
+                    }
+                }
+            }
+            .navigationTitle("Mon Profil")
+        }
+    }
+}`
+            }
+        ]
+    },
+    "casting-fr": {
+        title: "Conversion de Types (Casting)",
+        sections: [
+            {
+                type: "text",
+                content: "Le 'Casting' ou conversion de type est l'action de transformer une valeur d'un type (ex: Int) vers un autre type (ex: String)."
+            },
+            {
+                type: "heading",
+                content: "Int vers String"
+            },
+            {
+                type: "text",
+                content: "C'est la conversion la plus courante, souvent utilisée pour afficher des nombres dans du texte."
+            },
+            {
+                type: "code",
+                title: "Int -> String",
+                language: "swift",
+                code: `let score = 100
+// Méthode 1 : Initialiseur String()
+let scoreText = String(score) 
+
+// Méthode 2 : Interpolation (recommandé)
+let message = "Votre score est de \(score) points"
+`
+            },
+            {
+                type: "heading",
+                content: "String vers Int"
+            },
+            {
+                type: "text",
+                content: "Attention : Convertir un texte en nombre peut échouer si le texte ne contient pas un nombre valide. Le résultat est donc un Optionnel."
+            },
+            {
+                type: "code",
+                title: "String -> Int",
+                language: "swift",
+                code: `let numberString = "42"
+let invalidString = "Quarante-deux"
+
+// Conversion
+let myNumber = Int(numberString) // Optional(42)
+let myFailedNumber = Int(invalidString) // nil
+
+// Utilisation sécurisée avec if let ou ??
+if let safeNumber = Int(numberString) {
+    print("Le nombre est \(safeNumber)")
+} else {
+    print("Ce n'est pas un nombre valide")
+}
+
+let conversionRapide = Int(numberString) ?? 0 // 0 par défaut si échec`
+            },
+            {
+                type: "heading",
+                content: "Int et Double"
+            },
+            {
+                type: "text",
+                content: "Swift est strict : vous ne pouvez pas additionner un Int et un Double sans conversion explicite."
+            },
+            {
+                type: "code",
+                title: "Int <-> Double",
+                language: "swift",
+                code: `let entier = 5
+let decimal = 3.14
+
+// let total = entier + decimal // ERREUR !
+
+// Solution : Tout convertir en Double
+let totalDouble = Double(entier) + decimal // 8.14
+
+// Ou tout convertir en Int (perd la décimale)
+let totalInt = entier + Int(decimal) // 5 + 3 = 8`
             }
         ]
     },
