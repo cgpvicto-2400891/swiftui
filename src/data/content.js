@@ -2074,5 +2074,65 @@ let newGreeting = greeting.replacingOccurrences(of: "Monde", with: "Swift")
 print(newGreeting) // "Bonjour Swift"`
             }
         ]
+    },
+    "dictionaries-fr": {
+        title: "Dictionnaires (Dictionary)",
+        sections: [
+            {
+                type: "text",
+                content: "Un dictionnaire stocke des associations entre des clés uniques et des valeurs. C'est comme un vrai dictionnaire : vous cherchez un mot (clé) pour trouver sa définition (valeur)."
+            },
+            {
+                type: "heading",
+                content: "Déclaration"
+            },
+            {
+                type: "code",
+                title: "Créer un dictionnaire",
+                language: "swift",
+                code: `// Dictionnaire vide : [TypeClé: TypeValeur]
+var scores: [String: Int] = [:]
+
+// Dictionnaire avec valeurs initiales
+var capitales = [
+    "France": "Paris",
+    "Japon": "Tokyo",
+    "Italie": "Rome"
+]`
+            },
+            {
+                type: "heading",
+                content: "Manipulation"
+            },
+            {
+                type: "text",
+                content: "Vous pouvez ajouter, modifier ou lire des valeurs en utilisant la syntaxe par sous-script `[clé]`."
+            },
+            {
+                type: "code",
+                title: "Lire et Écrire",
+                language: "swift",
+                code: `// Ajouter ou Modifier
+scores["Alice"] = 10
+scores["Bob"] = 8
+scores["Alice"] = 12 // Met à jour la valeur existante
+
+// Lire (retourne un Optionnel)
+print(scores["Alice"]) // Optional(12)
+
+if let scoreAlice = scores["Alice"] {
+    print("Le score d'Alice est \(scoreAlice)")
+} else {
+    print("Alice n'a pas encore de score")
+}
+
+// Supprimer
+scores["Bob"] = nil`
+            },
+            {
+                type: "tip",
+                content: "Les dictionnaires ne sont pas ordonnés. L'ordre des éléments peut changer."
+            }
+        ]
     }
 };

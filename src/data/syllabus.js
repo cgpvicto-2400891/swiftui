@@ -63,7 +63,8 @@ export const syllabus = [
             { id: 'reusable-views-fr', title: "Vues Réutilisables", path: "/swift-fr/reusable-views-fr" },
             { id: "form-fr", title: "Formulaires (Form)", path: "/swift-fr/form-fr" },
             { id: "string-methods-fr", title: "Méthodes de String", path: "/swift-fr/string-methods-fr" },
-            { id: "casting-fr", title: "Conversion de Types (Casting)", path: "/swift-fr/casting-fr" }
+            { id: "casting-fr", title: "Conversion de Types (Casting)", path: "/swift-fr/casting-fr" },
+            { id: "dictionaries-fr", title: "Dictionnaires (Dictionary)", path: "/swift-fr/dictionaries-fr" }
         ]
     }
 ];
