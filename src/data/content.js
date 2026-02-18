@@ -2019,6 +2019,32 @@ let totalDouble = Double(entier) + decimal // 8.14
 
 // Ou tout convertir en Int (perd la décimale)
 let totalInt = entier + Int(decimal) // 5 + 3 = 8`
+            },
+            {
+                type: "heading",
+                content: "Decimal vers String"
+            },
+            {
+                type: "text",
+                content: "Pour convertir un nombre décimal (Double) en texte, vous pouvez utiliser l'interpolation ou formater le nombre pour limiter les chiffres après la virgule."
+            },
+            {
+                type: "code",
+                title: "Double -> String",
+                language: "swift",
+                code: `let montant: Decimal = 1234.5678
+
+// Méthode 1 : Conversion simple (String(describing:))
+let str1 = String(describing: montant) // "1234.5678"
+
+// Méthode 2 : Interpolation (identique à String(describing:))
+let simpleString = "Montant : \\(montant)"
+
+// Méthode 3 : .formatted() (Swift 5.5+, recommandé pour l'UI)
+let formattedString = montant.formatted(.number.precision(.fractionLength(2))) // "1 234,57"
+
+// Méthode 4 : String(format:) - Style classique
+let legacyString = String(format: "%.2f", Double(truncating: montant as NSNumber)) // "1234.57"`
             }
         ]
     },
