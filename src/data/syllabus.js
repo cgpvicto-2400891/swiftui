@@ -64,7 +64,15 @@ export const syllabus = [
             { id: "form-fr", title: "Formulaires (Form)", path: "/swift-fr/form-fr" },
             { id: "string-methods-fr", title: "Méthodes de String", path: "/swift-fr/string-methods-fr" },
             { id: "casting-fr", title: "Conversion de Types (Casting)", path: "/swift-fr/casting-fr" },
-            { id: "dictionaries-fr", title: "Dictionnaires (Dictionary)", path: "/swift-fr/dictionaries-fr" }
+            { id: "dictionaries-fr", title: "Dictionnaires (Dictionary)", path: "/swift-fr/dictionaries-fr" },
+            { id: "events-fr", title: "Événements SwiftUI", path: "/swift-fr/events-fr" },
+            { id: "modifiers-advanced-fr", title: "Modificateurs Avancés", path: "/swift-fr/modifiers-advanced-fr" },
+            { id: "selection-controls-fr", title: "Checkboxes & Radios", path: "/swift-fr/selection-controls-fr" },
+            { id: "architecture-app-fr", title: "Architecture de l'App", path: "/swift-fr/architecture-app-fr" },
+            { id: "navigation-pages-fr", title: "Navigation entre Pages", path: "/swift-fr/navigation-pages-fr" },
+            { id: "troubleshooting-fr", title: "Troubleshooting & Erreurs", path: "/swift-fr/troubleshooting-fr" },
+            { id: "time-date-fr", title: "Temps & Dates", path: "/swift-fr/time-date-fr" },
+            { id: "animations-transitions-fr", title: "Animations & Transitions", path: "/swift-fr/animations-transitions-fr" }
         ]
     }
 ];

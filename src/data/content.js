@@ -2134,5 +2134,915 @@ scores["Bob"] = nil`
                 content: "Les dictionnaires ne sont pas ordonnés. L'ordre des éléments peut changer."
             }
         ]
+    },
+    "events-fr": {
+        title: "Événements SwiftUI",
+        sections: [
+            {
+                type: "text",
+                content: "Les événements vous permettent de réagir aux actions de l'utilisateur ou aux changements d'état dans votre application."
+            },
+            {
+                type: "heading",
+                content: "1. .onChange"
+            },
+            {
+                type: "text",
+                content: "Se déclenche lorsqu'une valeur spécifique change. Très utile pour valider des données ou synchroniser des états."
+            },
+            {
+                type: "code",
+                title: "Exemple onChange",
+                language: "swift",
+                code: `@State private var searchText = ""
+
+TextField("Rechercher", text: $searchText)
+    .onChange(of: searchText) { newValue in
+        print("La recherche est maintenant : \(newValue)")
+    }`
+            },
+            {
+                type: "heading",
+                content: "2. .onTapGesture"
+            },
+            {
+                type: "text",
+                content: "Permet de rendre n'importe quelle vue interactive (comme un Text ou une Image) au clic."
+            },
+            {
+                type: "code",
+                title: "Exemple onTapGesture",
+                language: "swift",
+                code: `Image(systemName: "heart.fill")
+    .foregroundColor(.red)
+    .onTapGesture {
+        print("Cœur cliqué !")
+    }`
+            },
+            {
+                type: "heading",
+                content: "3. .onAppear & .onDisappear"
+            },
+            {
+                type: "text",
+                content: "S'exécutent quand la vue apparaît à l'écran ou quand elle le quitte. Parfait pour charger des données."
+            },
+            {
+                type: "code",
+                title: "Exemple Cycle de vie",
+                language: "swift",
+                code: `Text("Ma Vue")
+    .onAppear {
+        print("La vue est affichée")
+    }
+    .onDisappear {
+        print("La vue a disparu")
+    }`
+            },
+            {
+                type: "heading",
+                content: "4. .onLongPressGesture"
+            },
+            {
+                type: "text",
+                content: "Se déclenche après un appui prolongé sur une vue."
+            },
+            {
+                type: "code",
+                title: "Exemple Appui Long",
+                language: "swift",
+                code: `Text("Appuie longuement")
+    .padding()
+    .background(Color.yellow)
+    .onLongPressGesture(minimumDuration: 2) {
+        print("Appui long détecté !")
+    }`
+            },
+            {
+                type: "heading",
+                content: "5. .onSubmit"
+            },
+            {
+                type: "text",
+                content: "Action déclenchée quand l'utilisateur appuie sur 'Retour' ou 'Valider' dans un champ de texte."
+            },
+            {
+                type: "code",
+                title: "Exemple onSubmit",
+                language: "swift",
+                code: `TextField("Nom", text: $name)
+    .onSubmit {
+        print("Formulaire envoyé !")
+    }`
+            }
+        ]
+    },
+    "modifiers-advanced-fr": {
+        title: "Modificateurs Avancés",
+        sections: [
+            {
+                type: "heading",
+                content: "Modificateurs de Boutons"
+            },
+            {
+                type: "text",
+                content: "Les boutons disposent de styles prédéfinis et de rôles spécifiques."
+            },
+            {
+                type: "code",
+                title: "Styles de Boutons",
+                language: "swift",
+                code: `Button("Action") { }
+    .buttonStyle(.borderedProminent) // Bouton plein
+    .buttonStyle(.bordered)          // Bouton avec bordure
+    .buttonStyle(.plain)             // Texte seul
+    .tint(.purple)                   // Couleur du bouton
+    .controlSize(.large)             // Taille du contrôle`
+            },
+            {
+                type: "code",
+                title: "Rôles de Boutons",
+                language: "swift",
+                code: `Button("Supprimer", role: .destructive) { } // En rouge par défaut
+Button("Annuler", role: .cancel) { }`
+            },
+            {
+                type: "heading",
+                content: "Modificateurs de TextField"
+            },
+            {
+                type: "text",
+                content: "Personnalisez l'interaction et le clavier des champs de saisie."
+            },
+            {
+                type: "code",
+                title: "TextField Style & Focus",
+                language: "swift",
+                code: `TextField("Email", text: $email)
+    .textFieldStyle(.roundedBorder)
+    .keyboardType(.emailAddress)
+    .submitLabel(.send)              // Change le texte de la touche retour
+    .autocorrectionDisabled()        // Désactive l'autocorrection
+    .textInputAutocapitalization(.never)`
+            },
+            {
+                type: "heading",
+                content: "Modificateurs de Form & List"
+            },
+            {
+                type: "text",
+                content: "Les formulaires et listes sont très flexibles dans SwiftUI."
+            },
+            {
+                type: "code",
+                title: "Personnalisation List/Form",
+                language: "swift",
+                code: `List {
+    Text("Élément 1")
+    Text("Élément 2")
+        .listRowBackground(Color.blue.opacity(0.1)) // Couleur de ligne
+}
+.listStyle(.insetGrouped) // Style moderne avec coins arrondis
+.refreshable {
+    // Action lors du "Pull to refresh"
+}
+.swipeActions(edge: .trailing) {
+    Button(role: .destructive) { } label: { Label("Supprimer", systemImage: "trash") }
+}`
+            },
+            {
+                type: "code",
+                title: "Form Style",
+                language: "swift",
+                code: `Form {
+    Section("Profil") {
+        TextField("Nom", text: $name)
+    }
+}
+.formStyle(.grouped)`
+            }
+        ]
+    },
+    "selection-controls-fr": {
+        title: "Checkboxes & Radio Buttons",
+        sections: [
+            {
+                type: "text",
+                content: "En SwiftUI, il n'y a pas de composant unique nommé 'Checkbox' ou 'RadioButton'. On utilise généralement des Toggles stylisés ou des Pickers pour obtenir ce comportement."
+            },
+            {
+                type: "heading",
+                content: "1. Créer une Checkbox"
+            },
+            {
+                type: "text",
+                content: "La façon la plus simple de créer une case à cocher est d'utiliser un `Toggle` avec le style `.toggleStyle(.checkbox)` (disponible sur macOS) ou de créer un style personnalisé pour iOS."
+            },
+            {
+                type: "code",
+                title: "Exemple Checkbox simple (iOS/Universal)",
+                language: "swift",
+                code: `@State private var isAccepted = false
+
+Toggle(isOn: $isAccepted) {
+    Text("J'accepte les conditions")
+}
+.toggleStyle(CheckboxStyle()) // Voir l'exemple complet plus bas`
+            },
+            {
+                type: "heading",
+                content: "2. Créer des Radio Buttons"
+            },
+            {
+                type: "text",
+                content: "Pour un choix unique parmi plusieurs options, on utilise un `Picker` avec le style `.pickerStyle(.radioGroup)` ou on crée des boutons personnalisés qui modifient la même variable d'état."
+            },
+            {
+                type: "code",
+                title: "Exemple Radio Buttons",
+                language: "swift",
+                code: `@State private var selectedOption = "Option 1"
+let options = ["Option 1", "Option 2", "Option 3"]
+
+Picker("Choisir une option", selection: $selectedOption) {
+    ForEach(options, id: \\.self) { option in
+        Text(option)
+    }
+}
+.pickerStyle(.radioGroup) // Style natif macOS, ou liste sur iOS`
+            },
+            {
+                type: "heading",
+                content: "3. Exemple Complet d'Utilisation"
+            },
+            {
+                type: "text",
+                content: "Voici un exemple de formulaire complet combinant des cases à cocher et des boutons radio personnalisés pour iOS."
+            },
+            {
+                type: "code",
+                title: "Formulaire de Préférences Complet",
+                language: "swift",
+                code: `struct PreferenceView: View {
+    @State private var notifications = true
+    @State private var newsletter = false
+    @State private var plan = "Gratuit"
+    let plans = ["Gratuit", "Pro", "Entreprise"]
+
+    var body: some View {
+        Form {
+            Section("Abonnements") {
+                // Checkbox via Toggle
+                Toggle("Activer les notifications", isOn: $notifications)
+                
+                Toggle(isOn: $newsletter) {
+                    HStack {
+                        Image(systemName: "envelope")
+                        Text("S'inscrire à la newsletter")
+                    }
+                }
+            }
+            
+            Section("Choisir un Plan (Radio Buttons)") {
+                ForEach(plans, id: \\.self) { p in
+                    HStack {
+                        Text(p)
+                        Spacer()
+                        // Radio Button fait maison
+                        Image(systemName: plan == p ? "largecircle.fill.circle" : "circle")
+                            .foregroundColor(plan == p ? .blue : .gray)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        plan = p
+                    }
+                }
+            }
+        }
+        .navigationTitle("Réglages")
+    }
+}`
+            }
+        ]
+    },
+    "architecture-app-fr": {
+        title: "Architecture : Créer une App par Composants",
+        sections: [
+            {
+                type: "text",
+                content: "La force de SwiftUI réside dans sa capacité à composer des interfaces complexes à partir de petites briques simples et réutilisables appelées 'Subviews' ou 'Components'."
+            },
+            {
+                type: "heading",
+                content: "1. Pourquoi diviser en composants ?"
+            },
+            {
+                type: "list",
+                items: [
+                    "Lisibilité : Un fichier de 50 lignes est plus facile à lire qu'un fichier de 500.",
+                    "Réutilisabilité : Utilisez le même Header ou Button sur plusieurs pages.",
+                    "Maintenance : Si vous changez le style du Footer, il se met à jour partout.",
+                    "Tests : Plus facile de tester une petite vue isolée."
+                ]
+            },
+            {
+                type: "heading",
+                content: "2. Créer des sous-vues (Subviews)"
+            },
+            {
+                type: "text",
+                content: "Vous pouvez extraire n'importe quelle partie de votre interface dans une variable ou une nouvelle structure (Struct)."
+            },
+            {
+                type: "code",
+                title: "Exemple de Composants isolés",
+                language: "swift",
+                code: `// 1. Le Header
+struct HeaderView: View {
+    var body: some View {
+        VStack {
+            Text("Mon App")
+                .font(.largeTitle)
+                .bold()
+            Divider()
+        }
+        .padding()
+    }
+}
+
+// 2. La section Hero (Bannière)
+struct HeroView: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.blue.gradient)
+                .frame(height: 150)
+            Text("Bienvenue sur ma plateforme")
+                .foregroundColor(.white)
+                .font(.headline)
+        }
+        .padding()
+    }
+}`
+            },
+            {
+                type: "heading",
+                content: "3. Assembler dans le ContentView"
+            },
+            {
+                type: "text",
+                content: "Le fichier parent devient alors un chef d'orchestre qui assemble simplement les pièces."
+            },
+            {
+                type: "code",
+                title: "Exemple complet d'assemblage",
+                language: "swift",
+                code: `struct MainView: View {
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 0) {
+                HeaderView() // Utilisation du composant
+                
+                HeroView()   // Utilisation du composant
+                
+                // Formulaire directement intégré ou extrait
+                VStack(alignment: .leading) {
+                    Text("Contactez-nous")
+                        .font(.title2)
+                    TextField("Email", text: .constant(""))
+                        .textFieldStyle(.roundedBorder)
+                    Button("Envoyer") { }
+                        .buttonStyle(.borderedProminent)
+                }
+                .padding()
+                
+                Spacer()
+                
+                FooterView() // Composant footer
+            }
+        }
+    }
+}
+
+struct FooterView: View {
+    var body: some View {
+        Text("© 2024 Mon Entreprise")
+            .font(.caption)
+            .foregroundColor(.gray)
+            .padding()
+    }
+}`
+            },
+            {
+                type: "tip",
+                content: "Utilisez 'Cmd + Clic' sur une vue dans Xcode et choisissez 'Extract Subview' pour créer automatiquement un nouveau composant !"
+            }
+        ]
+    },
+    "navigation-pages-fr": {
+        title: "Navigation : Créer une App Multi-Pages",
+        sections: [
+            {
+                type: "text",
+                content: "Pour passer d'un écran à un autre dans une application SwiftUI, on utilise un système de 'Pile de Navigation' (NavigationStack)."
+            },
+            {
+                type: "heading",
+                content: "1. NavigationStack"
+            },
+            {
+                type: "text",
+                content: "C'est le conteneur principal. Il doit être placé tout en haut de votre hiérarchie de vues pour activer la navigation."
+            },
+            {
+                type: "code",
+                title: "Structure de base",
+                language: "swift",
+                code: `NavigationStack {
+    VStack {
+        // Votre contenu ici
+    }
+    .navigationTitle("Accueil")
+}`
+            },
+            {
+                type: "heading",
+                content: "2. NavigationLink"
+            },
+            {
+                type: "text",
+                content: "C'est le bouton qui déclenche le changement de page. Vous lui donnez un label (ce qui est visible) et une destination (la vue à afficher)."
+            },
+            {
+                type: "code",
+                title: "Exemple de lien simple",
+                language: "swift",
+                code: `NavigationLink("Voir les détails") {
+    DetailView() // La page de destination
+}`
+            },
+            {
+                type: "heading",
+                content: "3. Exemple Complet : De l'Accueil au Détail"
+            },
+            {
+                type: "text",
+                content: "Voici comment construire une application simple avec deux pages."
+            },
+            {
+                type: "code",
+                title: "Multi-Page App Example",
+                language: "swift",
+                code: `// Page principale
+struct HomeView: View {
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                Image(systemName: "house.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.blue)
+                
+                Text("Bienvenue sur l'Accueil")
+                    .font(.title)
+                
+                // Le lien vers la page suivante
+                NavigationLink {
+                    DetailPage() // Destination
+                } label: {
+                    Text("Aller à la page Détail")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+            }
+            .navigationTitle("Ma Super App")
+        }
+    }
+}
+
+// Page de destination
+struct DetailPage: View {
+    var body: some View {
+        VStack {
+            Text("Ceci est la page de Détail !")
+                .font(.largeTitle)
+                .padding()
+            
+            Text("Vous avez navigué ici avec succès.")
+        }
+        .navigationTitle("Détails")
+        // Le bouton "Retour" est ajouté automatiquement par SwiftUI
+    }
+}`
+            },
+            {
+                type: "tip",
+                content: "Sur iOS, le NavigationStack ajoute automatiquement un bouton 'Retour' dans la barre de navigation de la page de destination."
+            }
+        ]
+    },
+    "troubleshooting-fr": {
+        title: "Troubleshooting : Résoudre les Erreurs SwiftUI",
+        sections: [
+            {
+                type: "text",
+                content: "Le compilateur Swift peut parfois être intimidant avec ses messages d'erreurs. Voici comment résoudre les problèmes les plus fréquents."
+            },
+            {
+                type: "heading",
+                content: "1. L'Erreur Mutable ('self' is immutable)"
+            },
+            {
+                type: "text",
+                content: "C'est l'erreur la plus courante. Par défaut, les structures (Struct) SwiftUI sont immuables. Si vous essayez de modifier une variable sans l'avoir marquée comme `@State`, Swift bloquera la compilation."
+            },
+            {
+                type: "code",
+                title: "Erreur et Solution",
+                language: "swift",
+                code: `// ❌ ERREUR : Cannot assign to property: 'self' is immutable
+struct MyView: View {
+    var count = 0 // Manque @State
+    var body: some View {
+        Button("Clic") { count += 1 }
+    }
+}
+
+// ✅ SOLUTION
+struct MyView: View {
+    @State private var count = 0
+    var body: some View {
+        Button("Clic") { count += 1 }
+    }
+}`
+            },
+            {
+                type: "heading",
+                content: "2. Plusieurs Vues à la Racine"
+            },
+            {
+                type: "text",
+                content: "La propriété `body` ne peut renvoyer qu'UNE SEULE vue. Si vous en mettez plusieurs sans les envelopper dans une Stack, vous aurez une erreur de type."
+            },
+            {
+                type: "code",
+                title: "Utilisez une Stack",
+                language: "swift",
+                code: `// ❌ ERREUR
+var body: some View {
+    Text("Bonjour")
+    Text("Le monde")
+}
+
+// ✅ SOLUTION
+var body: some View {
+    VStack {
+        Text("Bonjour")
+        Text("Le monde")
+    }
+}`
+            },
+            {
+                type: "heading",
+                content: "3. La Limite de 10 Vues"
+            },
+            {
+                type: "text",
+                content: "SwiftUI limite le nombre d'éléments directs dans un conteneur à 10. Au-delà, vous aurez l'erreur mystérieuse : 'Extra argument in call'."
+            },
+            {
+                type: "code",
+                title: "Utilisez Group ou découpez en composants",
+                language: "swift",
+                code: `VStack {
+    Group {
+        Text("1")
+        // ... jusqu'à 10
+    }
+    Group {
+        Text("11")
+        // ...
+    }
+}`
+            },
+            {
+                type: "heading",
+                content: "4. Vues Conditionnelles (If/Else)"
+            },
+            {
+                type: "text",
+                content: "Si vous utilisez un `if` sans `else` ou sans conteneur, Swift peut se plaindre que les types de vues ne correspondent pas entre les différentes branches du code."
+            },
+            {
+                type: "code",
+                title: "Solution : Stack ou Group",
+                language: "swift",
+                code: `var body: some View {
+    VStack { // Toujours envelopper vos conditions
+        if isLoggedIn {
+            ProfileView()
+        }
+    }
+}`
+            },
+            {
+                type: "heading",
+                content: "5. Index out of Range (Crash)"
+            },
+            {
+                type: "text",
+                content: "Cela arrive souvent dans les `List` ou `ForEach` quand les données source changent mais que SwiftUI essaie d'accéder à un ancien index."
+            },
+            {
+                type: "tip",
+                content: "Conseil : Utilisez toujours `id: \\.self` ou conformez vos modèles à `Identifiable` pour aider SwiftUI à suivre les changements."
+            },
+            {
+                type: "heading",
+                content: "6. Crash de Preview"
+            },
+            {
+                type: "text",
+                content: "Si votre Preview plante, c'est souvent parce qu'il manque des données d'environnement ou que vous avez une boucle infinie dans `@State`."
+            },
+            {
+                type: "code",
+                title: "Vérifier le PreviewProvider",
+                language: "swift",
+                code: `#Preview {
+    ContentView()
+        .environmentObject(UserData()) // Ne pas oublier les objets requis !
+}`
+            },
+            {
+                type: "heading",
+                content: "7. Modifier le @State dans le 'body'"
+            },
+            {
+                type: "text",
+                content: "Vous ne pouvez pas modifier un état directement pendant que SwiftUI dessine la vue. Cela crée une boucle infinie : le changement d'état force un redessin, qui change l'état, qui force un redessin..."
+            },
+            {
+                type: "code",
+                title: "Boucle Infinie",
+                language: "swift",
+                code: `// ❌ ERREUR : Modifying state during view update
+var body: some View {
+    self.count += 1 // Interdit ici !
+    return Text("Nombre : \(count)")
+}
+
+// ✅ SOLUTION : Utilisez un événement pour changer l'état
+var body: some View {
+    Text("Nombre : \(count)")
+        .onAppear {
+            self.count += 1 // Autorisé ici
+        }
+}`
+            },
+            {
+                type: "heading",
+                content: "8. Erreurs de Type (Double vs CGFloat)"
+            },
+            {
+                type: "text",
+                content: "SwiftUI utilise souvent des `CGFloat` pour les dimensions (frame, padding), mais Swift traite les nombres décimaux comme des `Double` par défaut."
+            },
+            {
+                type: "code",
+                title: "Conversion de Type",
+                language: "swift",
+                code: `let largeur: Double = 100.0
+
+// ❌ ERREUR : Cannot convert value of type 'Double' to 'CGFloat'
+Text("Hello")
+    .frame(width: largeur)
+
+// ✅ SOLUTION : Conversion explicite
+Text("Hello")
+    .frame(width: CGFloat(largeur))`
+            }
+        ]
+    },
+    "time-date-fr": {
+        title: "Gérer le Temps et les Dates",
+        sections: [
+            {
+                type: "text",
+                content: "SwiftUI simplifie énormément l'affichage et la manipulation des dates grâce aux extensions de `Text` et au composant `DatePicker`."
+            },
+            {
+                type: "heading",
+                content: "1. Afficher la Date et l'Heure"
+            },
+            {
+                type: "text",
+                content: "Pour afficher la date actuelle, on utilise `Date.now`. SwiftUI permet de formater cette date directement dans un `Text`."
+            },
+            {
+                type: "code",
+                title: "Formats d'affichage",
+                language: "swift",
+                code: `// Date et heure complètes
+Text(Date.now, format: .dateTime)
+
+// Uniquement la date (format localisé)
+Text(Date.now, format: .dateTime.day().month().year())
+
+// Uniquement l'heure
+Text(Date.now, format: .dateTime.hour().minute())`
+            },
+            {
+                type: "heading",
+                content: "2. Le DatePicker"
+            },
+            {
+                type: "text",
+                content: "Le `DatePicker` est le composant standard pour permettre à l'utilisateur de choisir une date ou une heure."
+            },
+            {
+                type: "code",
+                title: "Sélecteur de Date",
+                language: "swift",
+                code: `@State private var birthDate = Date()
+
+DatePicker("Date de naissance", selection: $birthDate, displayedComponents: [.date])
+    .datePickerStyle(.graphical) // Style calendrier complet`
+            },
+            {
+                type: "heading",
+                content: "3. Exemple Complet : Planificateur d'Événement"
+            },
+            {
+                type: "text",
+                content: "Voici un exemple qui combine l'affichage et la sélection avec une plage de dates (range)."
+            },
+            {
+                type: "code",
+                title: "Event Planner Example",
+                language: "swift",
+                code: `struct EventView: View {
+    @State private var eventDate = Date()
+    
+    // On définit une plage (optionnel) : à partir d'aujourd'hui
+    var dateRange: ClosedRange<Date> {
+        let min = Date.now
+        let max = Calendar.current.date(byAdding: .year, value: 1, to: .now)!
+        return min...max
+    }
+
+    var body: some View {
+        Form {
+            Section("Nouvel Événement") {
+                DatePicker(
+                    "Date de l'événement",
+                    selection: $eventDate,
+                    in: dateRange, // Limiter les dates
+                    displayedComponents: [.date, .hourAndMinute]
+                )
+            }
+            
+            Section("Récapitulatif") {
+                HStack {
+                    Text("Date choisie :")
+                    Spacer()
+                    Text(eventDate, format: .dateTime.day().month().year())
+                        .bold()
+                }
+                HStack {
+                    Text("Heure :")
+                    Spacer()
+                    Text(eventDate, format: .dateTime.hour().minute())
+                        .foregroundColor(.blue)
+                }
+            }
+        }
+    }
+}`
+            },
+            {
+                type: "tip",
+                content: "Vous pouvez utiliser `.datePickerStyle(.wheel)` pour un affichage classique façon rouleau iOS."
+            }
+        ]
+    },
+    "animations-transitions-fr": {
+        title: "Animations & Transitions",
+        sections: [
+            {
+                type: "text",
+                content: "SwiftUI rend les animations incroyablement faciles. Vous pouvez animer presque n'importe quel changement de propriété (couleur, taille, position, opacité) en une seule ligne de code."
+            },
+            {
+                type: "heading",
+                content: "1. Animation Implicite (.animation)"
+            },
+            {
+                type: "text",
+                content: "C'est la méthode la plus simple. Vous attachez le modificateur `.animation` à une vue, et elle s'animera automatiquement dès que la valeur surveillée change."
+            },
+            {
+                type: "code",
+                title: "Exemple Animation Implicite",
+                language: "swift",
+                code: `@State private var scale = 1.0
+
+Image(systemName: "star.fill")
+    .font(.system(size: 50))
+    .scaleEffect(scale)
+    .animation(.spring(), value: scale) // S'anime quand 'scale' change
+    .onTapGesture {
+        scale += 0.5
+    }`
+            },
+            {
+                type: "heading",
+                content: "2. Animation Explicite (withAnimation)"
+            },
+            {
+                type: "text",
+                content: "Parfois, vous voulez que le changement d'état lui-même soit animé. On utilise alors le bloc `withAnimation`."
+            },
+            {
+                type: "code",
+                title: "Exemple withAnimation",
+                language: "swift",
+                code: `@State private var angle = 0.0
+
+Button("Tourner l'image") {
+    withAnimation(.easeInOut(duration: 1)) {
+        angle += 90
+    }
+}
+
+Image(systemName: "arrow.right")
+    .rotationEffect(.degrees(angle))`
+            },
+            {
+                type: "heading",
+                content: "3. Transitions"
+            },
+            {
+                type: "text",
+                content: "Les transitions contrôlent comment une vue apparaît ou disparaît de l'écran (généralement dans un bloc `if`)."
+            },
+            {
+                type: "code",
+                title: "Exemple Transition",
+                language: "swift",
+                code: `@State private var showDetails = false
+
+VStack {
+    Button("Toggle Details") {
+        withAnimation {
+            showDetails.toggle()
+        }
+    }
+
+    if showDetails {
+        Text("Voici les détails secrets !")
+            .transition(.slide) // Glisse depuis le bord
+            .padding()
+            .background(Color.blue.opacity(0.1))
+    }
+}`
+            },
+            {
+                type: "heading",
+                content: "4. Exemple Complet : Bouton Interactif"
+            },
+            {
+                type: "text",
+                content: "Voici un exemple combinant plusieurs animations pour un effet premium."
+            },
+            {
+                type: "code",
+                title: "Bouton Pulse & Rotate",
+                language: "swift",
+                code: `struct AnimatedButton: View {
+    @State private var isPulsing = false
+    
+    var body: some View {
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
+                isPulsing.toggle()
+            }
+        } label: {
+            ZStack {
+                Circle()
+                    .fill(isPulsing ? Color.red : Color.blue)
+                    .frame(width: isPulsing ? 120 : 100)
+                
+                Image(systemName: "bolt.fill")
+                    .foregroundColor(.white)
+                    .font(.title)
+                    .rotationEffect(.degrees(isPulsing ? 360 : 0))
+            }
+        }
+    }
+}`
+            }
+        ]
     }
 };
